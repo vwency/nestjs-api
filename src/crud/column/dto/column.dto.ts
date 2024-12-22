@@ -10,6 +10,7 @@ export class ColumnDto {
   @IsString()
   column_name: string;
 
+  @ApiProperty()
   @IsString()
   description: string;
 }

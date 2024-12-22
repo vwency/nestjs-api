@@ -26,6 +26,7 @@ export class CommentsController {
   }
 
   @Post('add')
+  @ApiTags('Create comment')
   @UseGuards(AtGuard)
   async addComment(
     @Param() params: ParamDtoComment,

@@ -5,7 +5,8 @@ export class BodyDtoColumn {
   @ApiProperty()
   @IsString()
   column_name: string;
-
+  
+  @ApiProperty()
   @IsString()
   description: string;
 }

@@ -25,22 +25,40 @@ export class ColumnService {
   async deleteColumn(params: ParamDtoColumn): Promise<any> {
     const column = await this.FindColumn(params);
 
-    return await this.prisma.columns.delete({
+    await this.prisma.comments.deleteMany({
+      where: {
+        card: {
+          column_id: column.column_id,
+        },
+      },
+    });
+
+    await this.prisma.cards.deleteMany({
       where: {
         column_id: column.column_id,
       },
     });
+
+    const deletedColumn = await this.prisma.columns.delete({
+      where: {
+        column_id: column.column_id,
+      },
+    });
+
+    return deletedColumn;
   }
 
   async createColumn(ColumnDto: ColumnDto): Promise<any> {
     if (await this.FindColumn(ColumnDto))
       throw new NotFoundException('Column existed found');
 
-    return await this.prisma.columns.create({
+    const createdColumn = await this.prisma.columns.create({
       data: {
         ...ColumnDto,
       },
     });
+
+    return createdColumn;
   }
 
   async updateColumn(params: ParamDtoColumn, updatePayload: BodyDtoColumn) {
@@ -52,11 +70,13 @@ export class ColumnService {
 
     if (!column) throw new NotFoundException('Column not found');
 
-    return await this.prisma.columns.update({
+    const updatedColumn = await this.prisma.columns.update({
       where: { ...column },
       data: {
         ...updatePayload,
       },
     });
+
+    return updatedColumn;
   }
 }

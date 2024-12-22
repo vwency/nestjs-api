@@ -43,7 +43,7 @@ export class CrudLogic {
     dto['user_id'] = user?.user_id;
 
     const column = await this.findColumn(dto);
-    if (found && !column) {
+    if (!column) {
       throw new NotFoundException('Column not found');
     }
     dto['column_id'] = column?.column_id;
@@ -74,7 +74,7 @@ export class CrudLogic {
 
     const column = await this.findColumn(dto);
 
-    if (found && !column) {
+    if (!column) {
       throw new NotFoundException('Column not found');
     }
 
@@ -82,7 +82,7 @@ export class CrudLogic {
 
     const card = await this.findCard(dto);
 
-    if (found && !card) {
+    if (!card) {
       throw new NotFoundException('Card not found');
     }
 

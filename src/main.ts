@@ -8,7 +8,6 @@ async function bootstrap() {
     .setTitle('Nest js api')
     .setDescription('nest js with postgresql')
     .setVersion('0.1.2')
-    .addTag('easy')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
