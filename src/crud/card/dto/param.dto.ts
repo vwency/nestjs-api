@@ -15,12 +15,10 @@ export class ParamDtoCard {
   card_name: string;
 
   @Expose()
-  @ApiProperty()
   @IsUUID()
   user_id: uuidv4;
 
   @Expose()
-  @ApiProperty()
   @IsOptional()
   @IsUUID()
   column_id: string;

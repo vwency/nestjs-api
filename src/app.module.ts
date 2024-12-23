@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      ignoreEnvFile: false,
     }),
     AuthModule,
     CrudModule,

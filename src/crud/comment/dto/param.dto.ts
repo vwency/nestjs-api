@@ -21,12 +21,10 @@ export class ParamDtoComment {
   @IsUUID()
   comment_name: string;
 
-  @ApiProperty()
   @IsOptional()
   @IsUUID()
   column_id: string;
 
-  @ApiProperty()
   @IsOptional()
   @IsUUID()
   card_id: string;

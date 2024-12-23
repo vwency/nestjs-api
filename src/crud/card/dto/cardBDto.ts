@@ -4,11 +4,9 @@ import { Expose } from 'class-transformer';
 
 export class ParamBDtoCard {
   @Expose()
-  @ApiProperty()
   user_id: string;
 
   @Expose()
-  @ApiProperty()
   @IsOptional()
   @IsUUID()
   column_id: string;

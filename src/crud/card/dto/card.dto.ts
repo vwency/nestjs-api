@@ -7,11 +7,9 @@ export class CardDto {
   @IsString()
   column_name: string;
 
-  @ApiProperty()
   @IsUUID()
   user_id: uuidv4;
 
-  @ApiProperty()
   @IsOptional()
   @IsUUID()
   column_id: string;
