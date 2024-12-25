@@ -14,9 +14,9 @@ model Users {
   email    String?  @db.VarChar
   hashedRt String?  @db.VarChar
 
-  columns  Columns[]
-  cards    Cards[]
-  comments Comments[]
+  columns     Columns[] @relation(onDelete: Cascade)
+  cards       Cards[]   @relation(onDelete: Cascade)  
+  comments    Comments[] @relation(onDelete: Cascade)
 
   @@map("Users")
 }
@@ -27,8 +27,8 @@ model Columns {
   column_name        String   @unique @db.VarChar
   description String   @db.VarChar
 
-  cards    Cards[]
-  comments Comments[]
+  cards       Cards[]   @relation(onDelete: Cascade)  
+  comments    Comments[] @relation(onDelete: Cascade)
 
   user     Users    @relation(fields: [user_id], references: [user_id])
 
@@ -42,10 +42,10 @@ model Cards {
   card_name String   @unique @db.VarChar
   description String   @db.VarChar
 
+  comments Comments[] @relation(onDelete: Cascade)
+
   user     Users    @relation(fields: [user_id], references: [user_id])
   column   Columns  @relation(fields: [column_id], references: [column_id])
-
-  comments Comments[]
 
   @@map("Cards")
 }

@@ -25,20 +25,6 @@ export class ColumnService {
   async deleteColumn(params: ParamDtoColumn): Promise<any> {
     const column = await this.FindColumn(params);
 
-    await this.prisma.comments.deleteMany({
-      where: {
-        card: {
-          column_id: column.column_id,
-        },
-      },
-    });
-
-    await this.prisma.cards.deleteMany({
-      where: {
-        column_id: column.column_id,
-      },
-    });
-
     const deletedColumn = await this.prisma.columns.delete({
       where: {
         column_id: column.column_id,

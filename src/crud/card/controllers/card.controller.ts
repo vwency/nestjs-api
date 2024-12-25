@@ -8,7 +8,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CardDto } from '../dto/card.dto';
 import { CardService } from '../services/card.service';
 import { ParamDtoCard } from '../dto/param.dto';
@@ -21,12 +21,16 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @ApiTags('Get card')
+  @ApiOperation({ summary: 'Get card By ID' })
+  @ApiResponse({ status: 200, description: 'Card' })
   @Get(':card_name')
   async getCards(@Param() params: ParamDtoCard) {
     return await this.cardService.getCard(params);
   }
 
   @ApiTags('Create card')
+  @ApiOperation({ summary: 'Create card' })
+  @ApiResponse({ status: 201, description: 'Card created' })
   @UseGuards(AtGuard)
   @Post('add')
   async createCard(

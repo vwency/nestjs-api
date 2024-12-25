@@ -38,12 +38,6 @@ export class CardService {
     const crudLogic = new CrudLogic(this.prisma);
     const { card } = await crudLogic.findColumnCard(cardDto, true);
 
-    await this.prisma.comments.deleteMany({
-      where: {
-        card_id: card.card_id,
-      },
-    });
-
     const deletedCard = await this.prisma.cards.delete({
       where: {
         card_id: card.card_id,
