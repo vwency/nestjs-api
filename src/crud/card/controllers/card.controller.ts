@@ -8,7 +8,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CardDto } from '../dto/card.dto';
 import { CardService } from '../services/card.service';
 import { ParamDtoCard } from '../dto/param.dto';
@@ -20,7 +20,8 @@ import { AtGuard } from 'src/auth/common/guards';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
-  @ApiTags('Get card')
+  @ApiTags('Card')
+  @ApiBody({ description: 'The card details to update', type: ParamDtoCard })
   @ApiOperation({ summary: 'Get card By ID' })
   @ApiResponse({ status: 200, description: 'Card' })
   @Get(':card_name')
@@ -28,7 +29,11 @@ export class CardController {
     return await this.cardService.getCard(params);
   }
 
-  @ApiTags('Create card')
+  @ApiTags('Card')
+  @ApiBody({
+    description: 'Details to create card',
+    type: () => [ParamDtoCard, BodyCardDto],
+  })
   @ApiOperation({ summary: 'Create card' })
   @ApiResponse({ status: 201, description: 'Card created' })
   @UseGuards(AtGuard)
@@ -42,7 +47,13 @@ export class CardController {
     return await this.cardService.createCard(payload);
   }
 
-  @ApiTags('Delete card')
+  @ApiTags('Card')
+  @ApiBody({
+    description: 'Details to delete card',
+    type: CardDto,
+  })
+  @ApiOperation({ summary: 'Delete card' })
+  @ApiResponse({ status: 200, description: 'Card deleted' })
   @UseGuards(AtGuard)
   @Delete(':card_name')
   async deleteCard(
@@ -55,7 +66,13 @@ export class CardController {
     });
   }
 
-  @ApiTags('Update card')
+  @ApiTags('Card')
+  @ApiBody({
+    description: 'Details to update card',
+    type: () => [ParamDtoCard, BodyCardDto],
+  })
+  @ApiOperation({ summary: 'Update card' })
+  @ApiResponse({ status: 200, description: 'Card updated' })
   @UseGuards(AtGuard)
   @Put(':card_name')
   async updateColumn(

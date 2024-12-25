@@ -11,7 +11,7 @@ export class CardService {
 
   async getCard(cardDto: ParamDtoCard): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
-    const { card } = await crudLogic.findColumnCardComment(cardDto, true);
+    const { card } = await crudLogic.findColumnCard(cardDto, true);
 
     return JSON.stringify(card);
   }

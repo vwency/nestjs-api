@@ -12,11 +12,13 @@ import { AuthDto } from './dto';
 import { Tokens } from './types';
 import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators';
 import { AtGuard, RtGuard } from './common/guards';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiTags('Auth')
   @Public()
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
@@ -24,6 +26,7 @@ export class AuthController {
     return await this.authService.signupLocal(dto);
   }
 
+  @ApiTags('Auth')
   @Public()
   @Post('signin')
   @HttpCode(HttpStatus.OK)
@@ -31,6 +34,7 @@ export class AuthController {
     return await this.authService.signinLocal(dto);
   }
 
+  @ApiTags('Auth')
   @Post('logout')
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)
@@ -38,6 +42,7 @@ export class AuthController {
     return await this.authService.logout(userId);
   }
 
+  @ApiTags('Auth')
   @Public()
   @UseGuards(RtGuard)
   @Post('refresh')

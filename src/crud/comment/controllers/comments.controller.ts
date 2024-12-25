@@ -8,7 +8,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.service';
 import { ParamDtoComment } from '../dto/param.dto';
 import { BodyDtoComment } from '../dto/body.dto';
@@ -19,15 +19,28 @@ import { AtGuard } from 'src/auth/common/guards';
 export class CommentsController {
   constructor(private readonly commentService: CommentsService) {}
 
-  @ApiTags('Get comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to get comment',
+    type: ParamDtoComment,
+  })
+  @ApiOperation({ summary: 'Get comment by name' })
+  @ApiResponse({ status: 200, description: 'Comment' })
+  @UseGuards(AtGuard)
   @Get(':comment_name')
   async getComment(@Param() params: ParamDtoComment) {
     return await this.commentService.getComment(params);
   }
 
-  @Post('add')
-  @ApiTags('Create comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to create comment',
+    type: () => [ParamDtoComment, BodyDtoComment],
+  })
+  @ApiOperation({ summary: 'Create comment' })
+  @ApiResponse({ status: 201, description: 'Comment created' })
   @UseGuards(AtGuard)
+  @Post('add')
   async addComment(
     @Param() params: ParamDtoComment,
     @Body() body: BodyDtoComment,
@@ -37,7 +50,13 @@ export class CommentsController {
     return await this.commentService.createComment(comDto);
   }
 
-  @ApiTags('Delete comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to delete comment',
+    type: ParamDtoComment,
+  })
+  @ApiOperation({ summary: 'Delete comment' })
+  @ApiResponse({ status: 200, description: 'Comment deleted' })
   @UseGuards(AtGuard)
   @Delete(':comment_name')
   async deleteComment(
@@ -50,9 +69,15 @@ export class CommentsController {
     });
   }
 
-  @ApiTags('Update comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to update comment',
+    type: () => [ParamDtoComment, BodyDtoComment],
+  })
+  @ApiOperation({ summary: 'Update comment' })
+  @ApiResponse({ status: 201, description: 'Comment updated' })
   @UseGuards(AtGuard)
-  @Put(':card_name')
+  @Put(':comment_name')
   async updateColumn(
     @Param() params: ParamDtoComment,
     @Body() body: BodyDtoComment,

@@ -10,7 +10,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ColumnService } from '../services/column.service';
 import { ParamDtoColumn } from '../dto/param.dto';
 import { BodyDtoColumn } from '../dto/body.dto';
@@ -21,7 +21,10 @@ import { AtGuard } from 'src/auth/common/guards';
 export class ColumnController {
   constructor(private readonly columnService: ColumnService) {}
 
-  @ApiTags('Get column')
+  @ApiTags('Column')
+  @ApiBody({ description: 'Detail to get column', type: ParamDtoColumn })
+  @ApiOperation({ summary: 'Get column by name' })
+  @ApiResponse({ status: 200, description: 'Column' })
   @UseGuards(AtGuard)
   @Get(':column_name')
   @UsePipes(new ValidationPipe())
@@ -35,7 +38,13 @@ export class ColumnController {
     });
   }
 
-  @ApiTags('Create column')
+  @ApiTags('Column')
+  @ApiBody({
+    description: 'Details to create column',
+    type: () => [ParamDtoColumn, BodyDtoColumn],
+  })
+  @ApiOperation({ summary: 'Create column' })
+  @ApiResponse({ status: 201, description: 'Column created' })
   @UseGuards(AtGuard)
   @UsePipes(new ValidationPipe())
   @Post('add')
@@ -51,7 +60,13 @@ export class ColumnController {
     });
   }
 
-  @ApiTags('Delete column')
+  @ApiTags('Column')
+  @ApiBody({
+    description: 'Details to delete column',
+    type: ParamDtoColumn,
+  })
+  @ApiOperation({ summary: 'Create column' })
+  @ApiResponse({ status: 200, description: 'Column created' })
   @UseGuards(AtGuard)
   @Delete(':column_name')
   @UsePipes(new ValidationPipe())
@@ -65,9 +80,16 @@ export class ColumnController {
     });
   }
 
-  @ApiTags('Update column')
+  @ApiTags('Column')
+  @ApiBody({
+    description: 'Details to update column',
+    type: () => [ParamDtoColumn, BodyDtoColumn],
+  })
+  @ApiOperation({ summary: 'Update column' })
+  @ApiResponse({ status: 200, description: 'Column updated' })
   @UseGuards(AtGuard)
   @Put(':column_name')
+  @UsePipes(new ValidationPipe())
   async updateColumn(
     @Param() params: ParamDtoColumn,
     @Body() body: BodyDtoColumn,
