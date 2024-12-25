@@ -3,26 +3,25 @@ import { ColumnDto } from '../dto/column.dto';
 import { ParamDtoColumn } from '../dto/param.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BodyDtoColumn } from '../dto/body.dto';
+import { CrudLogic } from 'src/crud/logic/crud.ts.service';
 
 @Injectable()
 export class ColumnService {
-  constructor(private prisma: PrismaService) {}
-
-  async FindColumn(params: ParamDtoColumn): Promise<any> {
-    const column = await this.prisma.columns.findUnique({
-      where: { ...params },
-    });
-
-    return column;
-  }
+  constructor(
+    private prisma: PrismaService,
+    private crud: CrudLogic,
+  ) {}
 
   async GetColumnData(params: ParamDtoColumn): Promise<string> {
-    const column = await this.FindColumn(params);
+    const column = await this.crud.findColumn(params);
+    if (!column) throw new NotFoundException('Column not founded');
     return JSON.stringify(column);
   }
 
   async deleteColumn(params: ParamDtoColumn): Promise<any> {
-    const column = await this.FindColumn(params);
+    const column = await this.crud.findColumn(params);
+
+    if (!column) throw new NotFoundException('Column not founded');
 
     const deletedColumn = await this.prisma.columns.delete({
       where: {
@@ -34,8 +33,9 @@ export class ColumnService {
   }
 
   async createColumn(ColumnDto: ColumnDto): Promise<any> {
-    if (await this.FindColumn(ColumnDto))
-      throw new NotFoundException('Column existed found');
+    const column = await this.crud.findColumn(ColumnDto);
+
+    if (column) throw new NotFoundException('Column existed found');
 
     const createdColumn = await this.prisma.columns.create({
       data: {
@@ -47,11 +47,7 @@ export class ColumnService {
   }
 
   async updateColumn(params: ParamDtoColumn, updatePayload: BodyDtoColumn) {
-    const column = await this.prisma.columns.findUnique({
-      where: {
-        ...params,
-      },
-    });
+    const column = await this.crud.findColumn(params);
 
     if (!column) throw new NotFoundException('Column not found');
 
