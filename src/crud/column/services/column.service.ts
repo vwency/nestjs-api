@@ -12,7 +12,6 @@ export class ColumnService {
     const column = await this.prisma.columns.findUnique({
       where: { ...params },
     });
-    if (!column) throw new NotFoundException('Column not found');
 
     return column;
   }
