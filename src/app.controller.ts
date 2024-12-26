@@ -8,6 +8,7 @@ export class AppController {
   @Get()
   @Redirect('/api', 302)
   getHello(): string {
+    
     return this.appService.getHello();
   }
 }

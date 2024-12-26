@@ -9,13 +9,32 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DATABASE: ${DATABASE_NAME}
       PGDATA: ${PGDATA}
+      PGPORT: ${DATABASE_PORT}
     ports:
-      - "${DATABASE_PORT}:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     container_name: "postgresql"
     volumes:
       - pg_data:${PGDATA}
     networks:
       - backend
+
+
+  nestjs:
+    build:
+      context: .  
+      dockerfile: Dockerfile  
+    image: nestjs-app:latest
+    env_file:
+      - prod.env  
+    ports:
+      - "3000:3000"  
+    depends_on:
+      - postgres 
+    container_name: "nestjs-app"
+    networks:
+      - backend
+
+
 
 volumes:
   pg_data:
