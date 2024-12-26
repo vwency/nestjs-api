@@ -8,12 +8,12 @@ services:
       POSTGRES_USERNAME: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DATABASE: ${DATABASE_NAME}
-      PGDATA: /data/pgdata
+      PGDATA: ${PGDATA}
     ports:
       - "${DATABASE_PORT}:5432"
     container_name: "postgresql"
     volumes:
-      - pg_data:/data/pgdata
+      - pg_data:${PGDATA}
     networks:
       - backend
 
