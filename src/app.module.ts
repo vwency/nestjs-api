@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CrudModule } from './crud/crud.module';
 import { ConfigModule } from '@nestjs/config';
-import * as path from 'path';
 
 @Module({
   controllers: [AppController],
@@ -13,7 +12,7 @@ import * as path from 'path';
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: false,
-      envFilePath: process.env.ENV_FILE_PATH || '.env',
+      envFilePath: '.env',
     }),
     AuthModule,
     CrudModule,
