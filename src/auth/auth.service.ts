@@ -4,34 +4,35 @@ import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { AuthDto } from './dto';
 import { JwtPayload, Tokens } from './types';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Users } from 'src/typeorm/schema/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private config: ConfigService,
-    private prisma: PrismaService,
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
   ) {}
 
   async signupLocal(dto: AuthDto): Promise<Tokens> {
-    const User = await this.prisma.users.findUnique({
-      where: {
-        username: dto.username,
-      },
+    const User = await this.userRepository.findOne({
+      where: { username: dto.username },
     });
 
     if (User) throw { message: 'User already exists' };
 
     const hash = await argon.hash(dto.password);
 
-    const user = await this.prisma.users.create({
-      data: {
-        username: dto.username,
-        hash: hash,
-        email: dto.email,
-      },
+    const CreatedUser = this.userRepository.create({
+      username: dto.username,
+      hash: hash,
+      email: dto.email,
     });
+
+    const user = await this.userRepository.save(CreatedUser);
 
     const tokens = await this.getTokens(user.user_id, user.username);
     await this.updateRtHash(user.user_id, tokens.refresh_token);
@@ -40,7 +41,7 @@ export class AuthService {
   }
 
   async signinLocal(dto: AuthDto): Promise<Tokens> {
-    const User = await this.prisma.users.findUnique({
+    const User = await this.userRepository.findOne({
       where: { username: dto.username },
     });
 
@@ -56,22 +57,15 @@ export class AuthService {
   }
 
   async logout(userId: string): Promise<boolean> {
-    await this.prisma.users.updateMany({
-      where: {
-        user_id: userId,
-        hashedRt: {
-          not: null,
-        },
-      },
-      data: {
-        hashedRt: null,
-      },
-    });
+    await this.userRepository.update(
+      { user_id: userId, hashedRt: Not(IsNull()) },
+      { hashedRt: null },
+    );
     return true;
   }
 
   async refreshTokens(userId: string, rt: string): Promise<Tokens> {
-    const user = await this.prisma.users.findUnique({
+    const user = await this.userRepository.findOne({
       where: {
         user_id: userId,
       },
@@ -90,14 +84,7 @@ export class AuthService {
 
   async updateRtHash(userId: string, rt: string): Promise<void> {
     const hash = await argon.hash(rt);
-    await this.prisma.users.update({
-      where: {
-        user_id: userId,
-      },
-      data: {
-        hashedRt: hash,
-      },
-    });
+    await this.userRepository.update(userId, { hashedRt: hash });
   }
 
   async getTokens(userId: string, username: string): Promise<Tokens> {
