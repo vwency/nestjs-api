@@ -3,7 +3,7 @@
 ### Technology 
 
 1) boilerplate
-2) prismaORM
+2) TypeORM
 
 ### Deploy or prod run
 
