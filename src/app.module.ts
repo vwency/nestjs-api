@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { CrudModule } from './crud/crud.module';
 
 @Module({
   controllers: [AppController],
@@ -15,7 +14,6 @@ import { CrudModule } from './crud/crud.module';
       envFilePath: '.env',
     }),
     AuthModule,
-    CrudModule,
   ],
 })
 export class AppModule {}
