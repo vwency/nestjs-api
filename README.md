@@ -10,9 +10,9 @@
 Install direnv
 
 ```
-apt install direnv      Ubuntu / Debian-like  
+apt install direnv -y   Ubuntu / Debian-like  
 yum install direnv      Redhat  
-Pacman -S direnv        Archlinux  
+pacman -S direnv        Archlinux  
 dnf install direnv      Fedora  
 zypper install direnv   openSUSE  
 ```
