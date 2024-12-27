@@ -13,8 +13,8 @@ Install direnv
 apt install direnv      Ubuntu / Debian-like  
 yum install direnv      Redhat  
 Pacman -S direnv        Archlinux  
-dnf install direnv     Fedora  
-zypper install direnv  openSUSE  
+dnf install direnv      Fedora  
+zypper install direnv   openSUSE  
 ```
 
 Run direnv
