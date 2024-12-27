@@ -12,7 +12,6 @@ import {
 import { ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ColumnService } from '../services/column.service';
-import { ParamDtoColumn } from '../dto/param.dto';
 import { BodyDtoColumn } from '../dto/body.dto';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
 import { AtGuard } from 'src/auth/common/guards';
@@ -89,7 +88,7 @@ export class ColumnController {
   @ApiTags('Column')
   @ApiBody({
     description: 'Details to update column',
-    type: () => [ParamDtoColumn, BodyDtoColumn],
+    type: () => [ParamDtoUpdateColumn, BodyDtoColumn],
   })
   @ApiOperation({ summary: 'Update column' })
   @ApiResponse({ status: 200, description: 'Column updated' })

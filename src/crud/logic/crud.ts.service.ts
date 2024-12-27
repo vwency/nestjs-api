@@ -4,12 +4,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ParamDtoColumn } from 'src/crud/column/dto/param.dto';
 import { plainToClass } from 'class-transformer';
 import { ParamBDtoCard } from '../card/dto/cardBDto';
 import { ParamBDtoComment } from '../comment/dto/commentB.dto';
 import { ParamDtoUser } from '../user/dto/param.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ParamBDtoColumn } from '../column/dto/columnB.dto';
 
 @Injectable()
 export class CrudLogic {
@@ -29,6 +29,35 @@ export class CrudLogic {
       }, {} as Partial<T>);
 
     return filteredParams;
+  }
+
+  async findComment(params: ParamBDtoComment) {
+    const filteredParams = await this.filterParams(ParamBDtoComment, params);
+    return await this.prisma.comments.findFirst({
+      where: { ...filteredParams },
+    });
+  }
+
+  async findCard(params: ParamBDtoCard): Promise<any> {
+    const filteredParams = await this.filterParams(ParamBDtoCard, params);
+
+    return await this.prisma.cards.findFirst({
+      where: { ...filteredParams },
+    });
+  }
+
+  async findColumn(params: ParamBDtoColumn) {
+    const filteredParams = await this.filterParams(ParamBDtoColumn, params);
+    return await this.prisma.columns.findFirst({
+      where: { ...filteredParams },
+    });
+  }
+
+  async findUser(params: ParamDtoUser) {
+    const filteredParams = await this.filterParams(ParamDtoUser, params);
+    return await this.prisma.users.findFirst({
+      where: { ...filteredParams },
+    });
   }
 
   async findColumnCard(
@@ -99,34 +128,5 @@ export class CrudLogic {
     }
 
     return { column, card, comment };
-  }
-
-  async findComment(params: ParamBDtoComment) {
-    const filteredParams = await this.filterParams(ParamBDtoComment, params);
-    return await this.prisma.comments.findFirst({
-      where: { ...filteredParams },
-    });
-  }
-
-  async findCard(params: ParamBDtoCard): Promise<any> {
-    const filteredParams = await this.filterParams(ParamBDtoCard, params);
-
-    return await this.prisma.cards.findFirst({
-      where: { ...filteredParams },
-    });
-  }
-
-  async findColumn(params: ParamDtoColumn) {
-    const filteredParams = await this.filterParams(ParamDtoColumn, params);
-    return await this.prisma.columns.findFirst({
-      where: { ...filteredParams },
-    });
-  }
-
-  async findUser(params: ParamDtoUser) {
-    const filteredParams = await this.filterParams(ParamDtoUser, params);
-    return await this.prisma.users.findFirst({
-      where: { ...filteredParams },
-    });
   }
 }
