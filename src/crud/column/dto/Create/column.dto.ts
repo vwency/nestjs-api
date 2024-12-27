@@ -1,7 +1,7 @@
 import { IsString, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ColumnDto {
+export class DtoCreateColumn {
   @IsOptional()
   user_id: string;
 
