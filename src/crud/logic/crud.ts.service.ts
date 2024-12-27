@@ -2,18 +2,40 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
   UnauthorizedException,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { ParamBDtoCard } from '../card/dto/cardBDto';
 import { ParamBDtoComment } from '../comment/dto/commentB.dto';
 import { ParamDtoUser } from '../user/dto/param.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ParamBDtoColumn } from '../column/dto/columnB.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Users } from 'src/typeorm/schema/user.entity';
+import { Columns } from 'src/typeorm/schema/column.entity';
+import { Cards } from 'src/typeorm/schema/card.entity';
+import { Comments } from 'src/typeorm/schema/comment.entity';
 
 @Injectable()
 export class CrudLogic {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(Users)
+    @Optional()
+    private readonly userRepository?: Repository<Users>,
+
+    @InjectRepository(Columns)
+    @Optional()
+    private readonly columnRepository?: Repository<Columns>,
+
+    @InjectRepository(Cards)
+    @Optional()
+    private readonly cardRepository?: Repository<Cards>,
+
+    @InjectRepository(Comments)
+    @Optional()
+    private readonly commentRepository?: Repository<Comments>,
+  ) {}
 
   async filterParams<T>(
     dto: new () => T,
@@ -33,29 +55,26 @@ export class CrudLogic {
 
   async findComment(params: ParamBDtoComment) {
     const filteredParams = await this.filterParams(ParamBDtoComment, params);
-    return await this.prisma.comments.findFirst({
+    return await this.commentRepository.findOne({
       where: { ...filteredParams },
     });
   }
 
-  async findCard(params: ParamBDtoCard): Promise<any> {
+  async findCard(params: ParamBDtoCard) {
     const filteredParams = await this.filterParams(ParamBDtoCard, params);
-
-    return await this.prisma.cards.findFirst({
-      where: { ...filteredParams },
-    });
+    return await this.cardRepository.findOne({ where: { ...filteredParams } });
   }
 
   async findColumn(params: ParamBDtoColumn) {
     const filteredParams = await this.filterParams(ParamBDtoColumn, params);
-    return await this.prisma.columns.findFirst({
+    return await this.columnRepository.findOne({
       where: { ...filteredParams },
     });
   }
 
   async findUser(params: ParamDtoUser) {
     const filteredParams = await this.filterParams(ParamDtoUser, params);
-    return await this.prisma.users.findFirst({
+    return await this.userRepository.findOne({
       where: { ...filteredParams },
     });
   }
