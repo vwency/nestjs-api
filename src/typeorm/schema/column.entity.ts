@@ -1,21 +1,36 @@
 import {
   Entity,
-  Column as TypeOrmColumn,
   PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { Cards } from './card.entity';
+import { Comments } from './comment.entity';
+import { Users } from './user.entity';
 
-@Entity('columns')
+@Entity('Columns')
 export class Columns {
   @PrimaryGeneratedColumn('uuid')
   column_id: string;
 
-  @TypeOrmColumn('uuid')
-  user_id: uuidv4;
+  @Column('uuid')
+  user_id: string;
 
-  @TypeOrmColumn()
+  @Column({ type: 'varchar', unique: true })
   column_name: string;
 
-  @TypeOrmColumn()
-  description: string;
+  @Column({ type: 'varchar', nullable: true })
+  description?: string;
+
+  @OneToMany(() => Cards, (card) => card.column)
+  cards: Cards[];
+
+  @OneToMany(() => Comments, (comment) => comment.column)
+  comments: Comments[];
+
+  @ManyToOne(() => Users, (user) => user.columns, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
 }

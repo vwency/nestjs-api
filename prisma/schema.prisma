@@ -31,7 +31,7 @@ model Columns {
   cards              Cards[]  
   comments           Comments[] 
 
-  user     Users    @relation(fields: [user_id], references: [user_id])
+  user     Users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@map("Columns")
 }
@@ -43,9 +43,9 @@ model Cards {
   card_name         String   @unique @db.VarChar
   description       String?   @db.VarChar
 
-  comments          Comments[] // Убрано onDelete: Cascade
+  comments          Comments[] 
 
-  user     Users    @relation(fields: [user_id], references: [user_id])
+  user     Users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   column   Columns  @relation(fields: [column_id], references: [column_id], onDelete: Cascade)
 
   @@map("Cards")
