@@ -12,7 +12,7 @@ import { AuthDto } from './dto';
 import { Tokens } from './types';
 import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators';
 import { AtGuard, RtGuard } from './common/guards';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +35,7 @@ export class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiBearerAuth()
   @Post('logout')
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)

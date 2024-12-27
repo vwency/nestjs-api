@@ -8,7 +8,13 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CardService } from '../services/card.service';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
 import { AtGuard } from 'src/auth/common/guards';
@@ -24,6 +30,7 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @ApiTags('Card')
+  @ApiBearerAuth()
   @ApiBody({ description: 'The card details to update', type: ParamDtoGetCard })
   @ApiOperation({ summary: 'Get card By ID' })
   @ApiResponse({ status: 200, description: 'Card' })
@@ -33,6 +40,7 @@ export class CardController {
   }
 
   @ApiTags('Card')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to create card',
     type: () => [ParamDtoCreateCard, BodyDtoCreateCard],
@@ -56,6 +64,7 @@ export class CardController {
   }
 
   @ApiTags('Card')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to delete card',
     type: ParamDtoDeleteCard,
@@ -75,6 +84,7 @@ export class CardController {
   }
 
   @ApiTags('Card')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to update card',
     type: () => [ParamDtoUpdateCard, BodyDtoUpdateCard],

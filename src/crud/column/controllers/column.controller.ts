@@ -10,7 +10,13 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ColumnService } from '../services/column.service';
 import { BodyDtoColumn } from '../dto/body.dto';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
@@ -27,6 +33,7 @@ export class ColumnController {
   constructor(private readonly columnService: ColumnService) {}
 
   @ApiTags('Column')
+  @ApiBearerAuth()
   @ApiBody({ description: 'Detail to get column', type: ParamDtoGetColumn })
   @ApiOperation({ summary: 'Get column by name' })
   @ApiResponse({ status: 200, description: 'Column' })
@@ -44,6 +51,7 @@ export class ColumnController {
   }
 
   @ApiTags('Column')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to create column',
     type: () => [ParamDtoCreateColumn, BodyDtoCreateColumn],
@@ -66,6 +74,7 @@ export class ColumnController {
   }
 
   @ApiTags('Column')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to delete column',
     type: ParamDtoDeleteColumn,
@@ -86,6 +95,7 @@ export class ColumnController {
   }
 
   @ApiTags('Column')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to update column',
     type: () => [ParamDtoUpdateColumn, BodyDtoColumn],

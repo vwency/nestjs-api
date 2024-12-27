@@ -8,7 +8,13 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.service';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
 import { AtGuard } from 'src/auth/common/guards';
@@ -24,6 +30,7 @@ export class CommentsController {
   constructor(private readonly commentService: CommentsService) {}
 
   @ApiTags('Comment')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to get comment',
     type: ParamDtoGetComment,
@@ -37,6 +44,7 @@ export class CommentsController {
   }
 
   @ApiTags('Comment')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to create comment',
     type: () => [ParamDtoCreateComment, BodyDtoCreateComment],
@@ -61,6 +69,7 @@ export class CommentsController {
   }
 
   @ApiTags('Comment')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to delete comment',
     type: ParamDtoDeleteComment,
@@ -80,6 +89,7 @@ export class CommentsController {
   }
 
   @ApiTags('Comment')
+  @ApiBearerAuth()
   @ApiBody({
     description: 'Details to update comment',
     type: () => [ParamDtoUpdateComment, BodyDtoUpdateComment],
