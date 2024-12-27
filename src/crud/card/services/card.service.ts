@@ -52,7 +52,8 @@ export class CardService {
       ...payload,
     });
 
-    return Card;
+    return await this.cardRepository.save(Card);
+    throw new BadRequestException('Create error');
   }
 
   async deleteCard(cardDto: ParamDtoDeleteCard): Promise<any> {
@@ -62,7 +63,7 @@ export class CardService {
       this.cardRepository,
     );
 
-    const { card } = await crudLogic.findColumnCardComment(cardDto, true);
+    const { card } = await crudLogic.findColumnCard(cardDto, true);
 
     const CardDelete = await this.cardRepository.delete({
       ...card,
@@ -78,7 +79,7 @@ export class CardService {
       this.cardRepository,
     );
 
-    const { card } = await crudLogic.findColumnCardComment(params, true);
+    const { card } = await crudLogic.findColumnCard(params, true);
 
     Object.assign(card, updatePayload);
     return await this.cardRepository.save(card);

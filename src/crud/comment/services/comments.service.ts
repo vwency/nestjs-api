@@ -75,7 +75,9 @@ export class CommentsService {
       ...comment,
     });
 
-    return DeletedComment;
+    if (!!DeletedComment.affected)
+      return { message: 'Comment deleted successfully' };
+    throw new BadRequestException('Card was not deleted');
   }
 
   async updateComment(
