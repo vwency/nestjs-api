@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CommentDto } from '../dto/comment.dto';
-import { ParamDtoComment } from '../dto/param.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CrudLogic } from 'src/crud/logic/crud.ts.service';
-import { BodyDtoComment } from '../dto/body.dto';
+import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto';
+import { ParamDtoDeleteComment } from '../dto/Delete/ParamDeleteComment.dto';
+import { ParamDtoUpdateComment } from '../dto/Update/ParamUpdateComment.dto';
+import { BodyDtoUpdateComment } from '../dto/Update/BodyUpdateComment.dto';
 
 @Injectable()
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  async getComment(params: ParamDtoComment): Promise<string> {
+  async getComment(params: ParamDtoGetComment): Promise<string> {
     const crudLogic = new CrudLogic(this.prisma);
     const { comment } = await crudLogic.findColumnCardComment(params, true);
 
@@ -37,7 +39,7 @@ export class CommentsService {
     return Comment;
   }
 
-  async deleteComment(params: ParamDtoComment): Promise<any> {
+  async deleteComment(params: ParamDtoDeleteComment): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
     const { comment } = await crudLogic.findColumnCardComment(params, true);
 
@@ -50,7 +52,10 @@ export class CommentsService {
     return DeletedComment;
   }
 
-  async updateComment(params: ParamDtoComment, updatePayload: BodyDtoComment) {
+  async updateComment(
+    params: ParamDtoUpdateComment,
+    updatePayload: BodyDtoUpdateComment,
+  ) {
     const crudLogic = new CrudLogic(this.prisma);
 
     const { comment } = await crudLogic.findColumnCardComment(params, true);

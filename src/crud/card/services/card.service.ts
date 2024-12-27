@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CardDto } from '../dto/card.dto';
-import { ParamDtoCard } from '../dto/param.dto';
 import { CrudLogic } from 'src/crud/logic/crud.ts.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BodyCardDto } from '../dto/body.dto';
 import { ParamBDtoCard } from '../dto/cardBDto';
+import { ParamDtoGetCard } from '../dto/Get/ParamGetCard.dto';
+import { ParamDtoDeleteCard } from '../dto/Delete/ParamDeleteCard.dto';
+import { ParamDtoUpdateCard } from '../dto/Update/ParamUpdateCard.dto';
+
 @Injectable()
 export class CardService {
   constructor(private prisma: PrismaService) {}
 
-  async getCard(cardDto: ParamDtoCard): Promise<any> {
+  async getCard(cardDto: ParamDtoGetCard): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
     const { card } = await crudLogic.findColumnCard(cardDto, true);
 
@@ -34,7 +37,7 @@ export class CardService {
     return Card;
   }
 
-  async deleteCard(cardDto: CardDto): Promise<any> {
+  async deleteCard(cardDto: ParamDtoDeleteCard): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
     const { card } = await crudLogic.findColumnCard(cardDto, true);
 
@@ -47,7 +50,7 @@ export class CardService {
     return deletedCard;
   }
 
-  async updateCard(params: ParamDtoCard, updatePayload: BodyCardDto) {
+  async updateCard(params: ParamDtoUpdateCard, updatePayload: BodyCardDto) {
     const crudLogic = new CrudLogic(this.prisma);
 
     const { card } = await crudLogic.findColumnCard(params, true);
