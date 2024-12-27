@@ -8,27 +8,28 @@ datasource db {
 }
 
 model Users {
-  user_id       String   @id @default(uuid()) @db.Uuid
-  username String   @unique @db.VarChar
-  hash     String   @db.VarChar
-  email    String?  @db.VarChar
-  hashedRt String?  @db.VarChar
+  user_id    String   @id @default(uuid()) @db.Uuid
+  username   String   @unique @db.VarChar
+  hash       String   @db.VarChar
+  email      String?  @db.VarChar
+  hashedRt   String?  @db.VarChar
+  role       String?  @db.VarChar @default("user")
 
-  columns  Columns[]
-  cards    Cards[]
-  comments Comments[]
+  columns    Columns[] 
+  cards      Cards[]  
+  comments   Comments[] 
 
   @@map("Users")
 }
 
 model Columns {
   column_id          String   @id @default(uuid()) @db.Uuid
-  user_id     String   @db.Uuid
+  user_id            String   @db.Uuid
   column_name        String   @unique @db.VarChar
-  description String   @db.VarChar
+  description        String?   @db.VarChar
 
-  cards    Cards[]
-  comments Comments[]
+  cards              Cards[]  
+  comments           Comments[] 
 
   user     Users    @relation(fields: [user_id], references: [user_id])
 
@@ -36,31 +37,31 @@ model Columns {
 }
 
 model Cards {
-  card_id          String   @id @default(uuid()) @db.Uuid
-  user_id     String   @db.Uuid
-  column_id   String   @db.Uuid
-  card_name String   @unique @db.VarChar
-  description String   @db.VarChar
+  card_id           String   @id @default(uuid()) @db.Uuid
+  user_id           String   @db.Uuid
+  column_id         String   @db.Uuid
+  card_name         String   @unique @db.VarChar
+  description       String?   @db.VarChar
+
+  comments          Comments[] // Убрано onDelete: Cascade
 
   user     Users    @relation(fields: [user_id], references: [user_id])
-  column   Columns  @relation(fields: [column_id], references: [column_id])
-
-  comments Comments[]
+  column   Columns  @relation(fields: [column_id], references: [column_id], onDelete: Cascade)
 
   @@map("Cards")
 }
 
 model Comments {
-  comment_id          String   @id @default(uuid()) @db.Uuid
-  user_id     String   @db.Uuid
-  column_id   String   @db.Uuid
-  card_id     String   @db.Uuid
-  comment_name String   @unique @db.VarChar
-  description String   @db.VarChar
+  comment_id        String   @id @default(uuid()) @db.Uuid
+  user_id           String   @db.Uuid
+  column_id         String   @db.Uuid
+  card_id           String   @db.Uuid
+  comment_name      String   @unique @db.VarChar
+  description       String?   @db.VarChar
 
-  user     Users    @relation(fields: [user_id], references: [user_id])
-  column   Columns  @relation(fields: [column_id], references: [column_id])
-  card     Cards    @relation(fields: [card_id], references: [card_id])
+  user              Users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  column            Columns  @relation(fields: [column_id], references: [column_id], onDelete: Cascade) 
+  card              Cards    @relation(fields: [card_id], references: [card_id], onDelete: Cascade) 
 
   @@map("Comments")
 }

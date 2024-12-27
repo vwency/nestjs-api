@@ -8,40 +8,69 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.service';
-import { ParamDtoComment } from '../dto/param.dto';
-import { BodyDtoComment } from '../dto/body.dto';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
 import { AtGuard } from 'src/auth/common/guards';
+import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto';
+import { ParamDtoCreateComment } from '../dto/Create/ParamCreateComment.dto';
+import { BodyDtoCreateComment } from '../dto/Create/BodyCreateComment.dto';
+import { ParamDtoDeleteComment } from '../dto/Delete/ParamDeleteComment.dto';
+import { ParamDtoUpdateComment } from '../dto/Update/ParamUpdateComment.dto';
+import { BodyDtoUpdateComment } from '../dto/Update/BodyUpdateComment.dto';
 
 @Controller('column/:column_name/card/:card_name/comment/')
 export class CommentsController {
   constructor(private readonly commentService: CommentsService) {}
 
-  @ApiTags('Get comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to get comment',
+    type: ParamDtoGetComment,
+  })
+  @ApiOperation({ summary: 'Get comment by name' })
+  @ApiResponse({ status: 200, description: 'Comment' })
+  @UseGuards(AtGuard)
   @Get(':comment_name')
-  async getComment(@Param() params: ParamDtoComment) {
+  async getComment(@Param() params: ParamDtoGetComment) {
     return await this.commentService.getComment(params);
   }
 
-  @Post('add')
-  @ApiTags('Create comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to create comment',
+    type: () => [ParamDtoCreateComment, BodyDtoCreateComment],
+  })
+  @ApiOperation({ summary: 'Create comment' })
+  @ApiResponse({ status: 201, description: 'Comment created' })
   @UseGuards(AtGuard)
+  @Post('add')
   async addComment(
-    @Param() params: ParamDtoComment,
-    @Body() body: BodyDtoComment,
+    @Param() params: ParamDtoCreateComment,
+    @Body() body: BodyDtoCreateComment,
     @GetCurrentUserId() userId: string,
   ) {
-    const comDto = { ...params, user_id: userId, ...body };
+    const comDto = {
+      ...params,
+      user_id: userId,
+      ...body,
+      column_id: undefined,
+      card_id: undefined,
+    };
     return await this.commentService.createComment(comDto);
   }
 
-  @ApiTags('Delete comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to delete comment',
+    type: ParamDtoDeleteComment,
+  })
+  @ApiOperation({ summary: 'Delete comment' })
+  @ApiResponse({ status: 200, description: 'Comment deleted' })
   @UseGuards(AtGuard)
   @Delete(':comment_name')
   async deleteComment(
-    @Param() params: ParamDtoComment,
+    @Param() params: ParamDtoDeleteComment,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.commentService.deleteComment({
@@ -50,12 +79,18 @@ export class CommentsController {
     });
   }
 
-  @ApiTags('Update comment')
+  @ApiTags('Comment')
+  @ApiBody({
+    description: 'Details to update comment',
+    type: () => [ParamDtoUpdateComment, BodyDtoUpdateComment],
+  })
+  @ApiOperation({ summary: 'Update comment' })
+  @ApiResponse({ status: 201, description: 'Comment updated' })
   @UseGuards(AtGuard)
-  @Put(':card_name')
+  @Put(':comment_name')
   async updateColumn(
-    @Param() params: ParamDtoComment,
-    @Body() body: BodyDtoComment,
+    @Param() params: ParamDtoUpdateComment,
+    @Body() body: BodyDtoUpdateComment,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.commentService.updateComment(

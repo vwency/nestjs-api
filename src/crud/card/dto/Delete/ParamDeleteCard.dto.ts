@@ -1,9 +1,13 @@
-import { IsString, IsUUID, IsOptional } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuidv4 } from 'uuid';
 import { Expose } from 'class-transformer';
 
-export class ParamDtoCard {
+export class ParamDtoDeleteCard {
+  @Expose()
+  @IsUUID()
+  user_id: uuidv4;
+
   @Expose()
   @ApiProperty()
   @IsString()
@@ -13,13 +17,4 @@ export class ParamDtoCard {
   @ApiProperty()
   @IsString()
   card_name: string;
-
-  @Expose()
-  @IsUUID()
-  user_id: uuidv4;
-
-  @Expose()
-  @IsOptional()
-  @IsUUID()
-  column_id: string;
 }
