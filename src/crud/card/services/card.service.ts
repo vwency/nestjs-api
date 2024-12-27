@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CardDto } from '../dto/card.dto';
+import { DtoCreateCard } from '../dto/Create/CreateCard.dto';
 import { CrudLogic } from 'src/crud/logic/crud.ts.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BodyCardDto } from '../dto/body.dto';
@@ -19,7 +19,7 @@ export class CardService {
     return JSON.stringify(card);
   }
 
-  async createCard(cardDto: CardDto): Promise<any> {
+  async createCard(cardDto: DtoCreateCard): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
     const { column } = await crudLogic.findColumnCard(cardDto, false);
 
