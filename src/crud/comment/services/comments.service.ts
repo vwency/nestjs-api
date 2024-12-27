@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommentDto } from '../dto/comment.dto';
+import { DtoCreateComment } from '../dto/Create/comment.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CrudLogic } from 'src/crud/logic/crud.ts.service';
 import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto';
@@ -18,7 +18,7 @@ export class CommentsService {
     return JSON.stringify(comment);
   }
 
-  async createComment(comDto: CommentDto): Promise<any> {
+  async createComment(comDto: DtoCreateComment): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma);
     const { column, card } = await crudLogic.findColumnCardComment(
       comDto,
