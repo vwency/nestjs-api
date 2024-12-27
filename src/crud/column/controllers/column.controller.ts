@@ -16,20 +16,26 @@ import { ParamDtoColumn } from '../dto/param.dto';
 import { BodyDtoColumn } from '../dto/body.dto';
 import { GetCurrentUserId } from 'src/auth/common/decorators';
 import { AtGuard } from 'src/auth/common/guards';
+import { ParamDtoGetColumn } from '../dto/Get/ParamGetColumn.dto';
+import { ParamDtoCreateColumn } from '../dto/Create/ParamCreateColumn.dto';
+import { BodyDtoCreateColumn } from '../dto/Create/BodyCreateColumn.dto';
+import { ParamDtoDeleteColumn } from '../dto/Delete/ParamDeleteColumn.dto';
+import { ParamDtoUpdateColumn } from '../dto/Update/ParamUpdateColumn.dto';
+import { BodyDtoUpdateColumn } from '../dto/Update/BodyUpdateColumn.dto';
 
 @Controller('column/')
 export class ColumnController {
   constructor(private readonly columnService: ColumnService) {}
 
   @ApiTags('Column')
-  @ApiBody({ description: 'Detail to get column', type: ParamDtoColumn })
+  @ApiBody({ description: 'Detail to get column', type: ParamDtoGetColumn })
   @ApiOperation({ summary: 'Get column by name' })
   @ApiResponse({ status: 200, description: 'Column' })
   @UseGuards(AtGuard)
   @Get(':column_name')
   @UsePipes(new ValidationPipe())
   async findUserColumns(
-    @Param() params: ParamDtoColumn,
+    @Param() params: ParamDtoGetColumn,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.columnService.GetColumnData({
@@ -41,7 +47,7 @@ export class ColumnController {
   @ApiTags('Column')
   @ApiBody({
     description: 'Details to create column',
-    type: () => [ParamDtoColumn, BodyDtoColumn],
+    type: () => [ParamDtoCreateColumn, BodyDtoCreateColumn],
   })
   @ApiOperation({ summary: 'Create column' })
   @ApiResponse({ status: 201, description: 'Column created' })
@@ -49,8 +55,8 @@ export class ColumnController {
   @UsePipes(new ValidationPipe())
   @Post('add')
   async createColumn(
-    @Param() params: ParamDtoColumn,
-    @Body() body: BodyDtoColumn,
+    @Param() params: ParamDtoCreateColumn,
+    @Body() body: BodyDtoCreateColumn,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.columnService.createColumn({
@@ -63,7 +69,7 @@ export class ColumnController {
   @ApiTags('Column')
   @ApiBody({
     description: 'Details to delete column',
-    type: ParamDtoColumn,
+    type: ParamDtoDeleteColumn,
   })
   @ApiOperation({ summary: 'Create column' })
   @ApiResponse({ status: 200, description: 'Column created' })
@@ -71,7 +77,7 @@ export class ColumnController {
   @Delete(':column_name')
   @UsePipes(new ValidationPipe())
   async DeleteColumn(
-    @Param() params: ParamDtoColumn,
+    @Param() params: ParamDtoDeleteColumn,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.columnService.deleteColumn({
@@ -91,8 +97,8 @@ export class ColumnController {
   @Put(':column_name')
   @UsePipes(new ValidationPipe())
   async updateColumn(
-    @Param() params: ParamDtoColumn,
-    @Body() body: BodyDtoColumn,
+    @Param() params: ParamDtoUpdateColumn,
+    @Body() body: BodyDtoUpdateColumn,
     @GetCurrentUserId() userId: string,
   ) {
     return await this.columnService.updateColumn(
