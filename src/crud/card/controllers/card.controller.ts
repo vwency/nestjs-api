@@ -39,7 +39,11 @@ export class CardController {
   @UseGuards(AtGuard)
   @UsePipes(new ValidationPipe())
   @Get(':card_name')
-  async getCards(@Param() params: ParamDtoGetCard) {
+  async getCards(
+    @Param() params: ParamDtoGetCard,
+    @GetCurrentUserId() userId: string,
+  ) {
+    params.user_id = userId;
     return await this.cardService.getCard(params);
   }
 

@@ -42,7 +42,11 @@ export class CommentsController {
   @UseGuards(AtGuard)
   @UsePipes(new ValidationPipe())
   @Get(':comment_name')
-  async getComment(@Param() params: ParamDtoGetComment) {
+  async getComment(
+    @Param() params: ParamDtoGetComment,
+    @GetCurrentUserId() userId: string,
+  ) {
+    params.user_id = userId;
     return await this.commentService.getComment(params);
   }
 
