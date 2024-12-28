@@ -10,6 +10,7 @@ export class ParamBDtoCard {
   @IsOptional()
   @IsUUID()
   column_id: string;
+
   @Expose()
   @ApiProperty()
   @IsString()

@@ -7,6 +7,8 @@ import {
   Delete,
   Param,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -38,6 +40,7 @@ export class CommentsController {
   @ApiOperation({ summary: 'Get comment by name' })
   @ApiResponse({ status: 200, description: 'Comment' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Get(':comment_name')
   async getComment(@Param() params: ParamDtoGetComment) {
     return await this.commentService.getComment(params);
@@ -52,6 +55,7 @@ export class CommentsController {
   @ApiOperation({ summary: 'Create comment' })
   @ApiResponse({ status: 201, description: 'Comment created' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Post('add')
   async addComment(
     @Param() params: ParamDtoCreateComment,
@@ -77,6 +81,7 @@ export class CommentsController {
   @ApiOperation({ summary: 'Delete comment' })
   @ApiResponse({ status: 200, description: 'Comment deleted' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Delete(':comment_name')
   async deleteComment(
     @Param() params: ParamDtoDeleteComment,
@@ -97,6 +102,7 @@ export class CommentsController {
   @ApiOperation({ summary: 'Update comment' })
   @ApiResponse({ status: 201, description: 'Comment updated' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Put(':comment_name')
   async updateColumn(
     @Param() params: ParamDtoUpdateComment,
