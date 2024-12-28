@@ -7,6 +7,8 @@ import {
   Delete,
   Param,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -34,6 +36,8 @@ export class CardController {
   @ApiBody({ description: 'The card details to update', type: ParamDtoGetCard })
   @ApiOperation({ summary: 'Get card By ID' })
   @ApiResponse({ status: 200, description: 'Card' })
+  @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Get(':card_name')
   async getCards(@Param() params: ParamDtoGetCard) {
     return await this.cardService.getCard(params);
@@ -48,6 +52,7 @@ export class CardController {
   @ApiOperation({ summary: 'Create card' })
   @ApiResponse({ status: 201, description: 'Card created' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Post('add')
   async createCard(
     @Param() params: ParamDtoCreateCard,
@@ -72,6 +77,7 @@ export class CardController {
   @ApiOperation({ summary: 'Delete card' })
   @ApiResponse({ status: 200, description: 'Card deleted' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Delete(':card_name')
   async deleteCard(
     @Param() cardDto: ParamDtoDeleteCard,
@@ -92,6 +98,7 @@ export class CardController {
   @ApiOperation({ summary: 'Update card' })
   @ApiResponse({ status: 200, description: 'Card updated' })
   @UseGuards(AtGuard)
+  @UsePipes(new ValidationPipe())
   @Put(':card_name')
   async updateColumn(
     @Param() params: ParamDtoUpdateCard,
