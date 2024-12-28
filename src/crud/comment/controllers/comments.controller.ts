@@ -9,23 +9,23 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
-} from '@nestjs/common';
+} from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
-} from '@nestjs/swagger';
-import { CommentsService } from '../services/comments.service';
-import { GetCurrentUserId } from 'src/auth/common/decorators';
-import { AtGuard } from 'src/auth/common/guards';
-import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto';
-import { ParamDtoCreateComment } from '../dto/Create/ParamCreateComment.dto';
-import { BodyDtoCreateComment } from '../dto/Create/BodyCreateComment.dto';
-import { ParamDtoDeleteComment } from '../dto/Delete/ParamDeleteComment.dto';
-import { ParamDtoUpdateComment } from '../dto/Update/ParamUpdateComment.dto';
-import { BodyDtoUpdateComment } from '../dto/Update/BodyUpdateComment.dto';
+} from '@nestjs/swagger'
+import { CommentsService } from '../services/comments.service'
+import { GetCurrentUserId } from 'src/auth/common/decorators'
+import { AtGuard } from 'src/auth/common/guards'
+import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto'
+import { ParamDtoCreateComment } from '../dto/Create/ParamCreateComment.dto'
+import { BodyDtoCreateComment } from '../dto/Create/BodyCreateComment.dto'
+import { ParamDtoDeleteComment } from '../dto/Delete/ParamDeleteComment.dto'
+import { ParamDtoUpdateComment } from '../dto/Update/ParamUpdateComment.dto'
+import { BodyDtoUpdateComment } from '../dto/Update/BodyUpdateComment.dto'
 
 @Controller('column/:column_name/card/:card_name/comment/')
 export class CommentsController {
@@ -46,8 +46,7 @@ export class CommentsController {
     @Param() params: ParamDtoGetComment,
     @GetCurrentUserId() userId: string,
   ) {
-    params.user_id = userId;
-    return await this.commentService.getComment(params);
+    return await this.commentService.getComment({ ...params, user_id: userId })
   }
 
   @ApiTags('Comment')
@@ -72,8 +71,8 @@ export class CommentsController {
       ...body,
       column_id: undefined,
       card_id: undefined,
-    };
-    return await this.commentService.createComment(comDto);
+    }
+    return await this.commentService.createComment(comDto)
   }
 
   @ApiTags('Comment')
@@ -94,7 +93,7 @@ export class CommentsController {
     return await this.commentService.deleteComment({
       ...params,
       user_id: userId,
-    });
+    })
   }
 
   @ApiTags('Comment')
@@ -116,6 +115,6 @@ export class CommentsController {
     return await this.commentService.updateComment(
       { ...params, user_id: userId },
       body,
-    );
+    )
   }
 }

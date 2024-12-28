@@ -5,14 +5,14 @@ import {
   HttpStatus,
   Post,
   UseGuards,
-} from '@nestjs/common';
+} from '@nestjs/common'
 
-import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
-import { Tokens } from './types';
-import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators';
-import { AtGuard, RtGuard } from './common/guards';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthService } from './auth.service'
+import { AuthDto } from './dto'
+import { Tokens } from './types'
+import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators'
+import { AtGuard, RtGuard } from './common/guards'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +23,7 @@ export class AuthController {
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return await this.authService.signupLocal(dto);
+    return await this.authService.signupLocal(dto)
   }
 
   @ApiTags('Auth')
@@ -31,7 +31,7 @@ export class AuthController {
   @Post('signin')
   @HttpCode(HttpStatus.OK)
   async signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return await this.authService.signinLocal(dto);
+    return await this.authService.signinLocal(dto)
   }
 
   @ApiTags('Auth')
@@ -40,7 +40,7 @@ export class AuthController {
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@GetCurrentUserId() userId: string): Promise<boolean> {
-    return await this.authService.logout(userId);
+    return await this.authService.logout(userId)
   }
 
   @ApiTags('Auth')
@@ -52,6 +52,6 @@ export class AuthController {
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string,
   ): Promise<Tokens> {
-    return await this.authService.refreshTokens(userId, refreshToken);
+    return await this.authService.refreshTokens(userId, refreshToken)
   }
 }

@@ -1,15 +1,15 @@
-import { IsString, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsOptional } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class DtoCreateColumn {
   @IsOptional()
-  user_id: string;
+  user_id: string
 
   @ApiProperty()
   @IsString()
-  column_name: string;
+  column_name: string
 
   @ApiProperty()
   @IsString()
-  description: string;
+  description: string
 }

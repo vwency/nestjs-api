@@ -1,39 +1,39 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class DtoCreateComment {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  user_id: string;
+  user_id: string
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  column_id: string;
+  column_id: string
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  column_name: string;
+  column_name: string
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  card_id: string;
+  card_id: string
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  card_name: string;
+  card_name: string
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  comment_name: string;
+  comment_name: string
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description: string
 }

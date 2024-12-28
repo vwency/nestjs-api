@@ -1,17 +1,17 @@
-import { IsString, IsUUID, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { IsString, IsUUID, IsOptional } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
+import { Expose } from 'class-transformer'
 
 export class ParamBDtoCard {
   @Expose()
-  user_id: string;
+  user_id: string
 
   @Expose()
   @IsOptional()
   @IsUUID()
-  column_id: string;
+  column_id: string
   @Expose()
   @ApiProperty()
   @IsString()
-  card_name: string;
+  card_name: string
 }

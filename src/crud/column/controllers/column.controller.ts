@@ -8,25 +8,25 @@ import {
   Param,
   UseGuards,
   UsePipes,
-} from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
+} from '@nestjs/common'
+import { ValidationPipe } from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
-} from '@nestjs/swagger';
-import { ColumnService } from '../services/column.service';
-import { BodyDtoColumn } from '../dto/body.dto';
-import { GetCurrentUserId } from 'src/auth/common/decorators';
-import { AtGuard } from 'src/auth/common/guards';
-import { ParamDtoGetColumn } from '../dto/Get/ParamGetColumn.dto';
-import { ParamDtoCreateColumn } from '../dto/Create/ParamCreateColumn.dto';
-import { BodyDtoCreateColumn } from '../dto/Create/BodyCreateColumn.dto';
-import { ParamDtoDeleteColumn } from '../dto/Delete/ParamDeleteColumn.dto';
-import { ParamDtoUpdateColumn } from '../dto/Update/ParamUpdateColumn.dto';
-import { BodyDtoUpdateColumn } from '../dto/Update/BodyUpdateColumn.dto';
+} from '@nestjs/swagger'
+import { ColumnService } from '../services/column.service'
+import { BodyDtoColumn } from '../dto/body.dto'
+import { GetCurrentUserId } from 'src/auth/common/decorators'
+import { AtGuard } from 'src/auth/common/guards'
+import { ParamDtoGetColumn } from '../dto/Get/ParamGetColumn.dto'
+import { ParamDtoCreateColumn } from '../dto/Create/ParamCreateColumn.dto'
+import { BodyDtoCreateColumn } from '../dto/Create/BodyCreateColumn.dto'
+import { ParamDtoDeleteColumn } from '../dto/Delete/ParamDeleteColumn.dto'
+import { ParamDtoUpdateColumn } from '../dto/Update/ParamUpdateColumn.dto'
+import { BodyDtoUpdateColumn } from '../dto/Update/BodyUpdateColumn.dto'
 
 @Controller('column/')
 export class ColumnController {
@@ -47,7 +47,7 @@ export class ColumnController {
     return await this.columnService.GetColumnData({
       ...params,
       user_id: userId,
-    });
+    })
   }
 
   @ApiTags('Column')
@@ -70,7 +70,7 @@ export class ColumnController {
       ...params,
       ...body,
       user_id: userId,
-    });
+    })
   }
 
   @ApiTags('Column')
@@ -91,7 +91,7 @@ export class ColumnController {
     return await this.columnService.deleteColumn({
       ...params,
       user_id: userId,
-    });
+    })
   }
 
   @ApiTags('Column')
@@ -113,6 +113,6 @@ export class ColumnController {
     return await this.columnService.updateColumn(
       { ...params, user_id: userId },
       body,
-    );
+    )
   }
 }

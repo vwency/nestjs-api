@@ -1,5 +1,5 @@
-import { Controller, Get, Redirect } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Redirect } from '@nestjs/common'
+import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
@@ -8,6 +8,6 @@ export class AppController {
   @Get()
   @Redirect('/api', 302)
   getHello(): string {
-    return this.appService.getHello();
+    return this.appService.getHello()
   }
 }

@@ -9,23 +9,23 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
-} from '@nestjs/common';
+} from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
-} from '@nestjs/swagger';
-import { CardService } from '../services/card.service';
-import { GetCurrentUserId } from 'src/auth/common/decorators';
-import { AtGuard } from 'src/auth/common/guards';
-import { ParamDtoGetCard } from '../dto/Get/ParamGetCard.dto';
-import { ParamDtoCreateCard } from '../dto/Create/ParamCreateCard.dto';
-import { BodyDtoCreateCard } from '../dto/Create/BodyCreateCard.dto';
-import { ParamDtoDeleteCard } from '../dto/Delete/ParamDeleteCard.dto';
-import { ParamDtoUpdateCard } from '../dto/Update/ParamUpdateCard.dto';
-import { BodyDtoUpdateCard } from '../dto/Update/BodyUpdateCard.dto';
+} from '@nestjs/swagger'
+import { CardService } from '../services/card.service'
+import { GetCurrentUserId } from 'src/auth/common/decorators'
+import { AtGuard } from 'src/auth/common/guards'
+import { ParamDtoGetCard } from '../dto/Get/ParamGetCard.dto'
+import { ParamDtoCreateCard } from '../dto/Create/ParamCreateCard.dto'
+import { BodyDtoCreateCard } from '../dto/Create/BodyCreateCard.dto'
+import { ParamDtoDeleteCard } from '../dto/Delete/ParamDeleteCard.dto'
+import { ParamDtoUpdateCard } from '../dto/Update/ParamUpdateCard.dto'
+import { BodyDtoUpdateCard } from '../dto/Update/BodyUpdateCard.dto'
 
 @Controller('column/:column_name/card/')
 export class CardController {
@@ -43,8 +43,7 @@ export class CardController {
     @Param() params: ParamDtoGetCard,
     @GetCurrentUserId() userId: string,
   ) {
-    params.user_id = userId;
-    return await this.cardService.getCard(params);
+    return await this.cardService.getCard({ ...params, user_id: userId })
   }
 
   @ApiTags('Card')
@@ -68,8 +67,8 @@ export class CardController {
       ...body,
       user_id: userId,
       column_id: undefined,
-    };
-    return await this.cardService.createCard(payload);
+    }
+    return await this.cardService.createCard(payload)
   }
 
   @ApiTags('Card')
@@ -90,7 +89,7 @@ export class CardController {
     return await this.cardService.deleteCard({
       ...cardDto,
       user_id: userId,
-    });
+    })
   }
 
   @ApiTags('Card')
@@ -112,6 +111,6 @@ export class CardController {
     return await this.cardService.updateCard(
       { ...params, user_id: userId },
       body,
-    );
+    )
   }
 }
