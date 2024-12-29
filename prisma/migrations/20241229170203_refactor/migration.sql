@@ -5,6 +5,7 @@ CREATE TABLE "Users" (
     "hash" VARCHAR NOT NULL,
     "email" VARCHAR,
     "hashedRt" VARCHAR,
+    "role" VARCHAR DEFAULT 'user',
 
     CONSTRAINT "Users_pkey" PRIMARY KEY ("user_id")
 );
@@ -14,7 +15,7 @@ CREATE TABLE "Columns" (
     "column_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "column_name" VARCHAR NOT NULL,
-    "description" VARCHAR NOT NULL,
+    "description" VARCHAR,
 
     CONSTRAINT "Columns_pkey" PRIMARY KEY ("column_id")
 );
@@ -25,7 +26,7 @@ CREATE TABLE "Cards" (
     "user_id" UUID NOT NULL,
     "column_id" UUID NOT NULL,
     "card_name" VARCHAR NOT NULL,
-    "description" VARCHAR NOT NULL,
+    "description" VARCHAR,
 
     CONSTRAINT "Cards_pkey" PRIMARY KEY ("card_id")
 );
@@ -37,7 +38,7 @@ CREATE TABLE "Comments" (
     "column_id" UUID NOT NULL,
     "card_id" UUID NOT NULL,
     "comment_name" VARCHAR NOT NULL,
-    "description" VARCHAR NOT NULL,
+    "description" VARCHAR,
 
     CONSTRAINT "Comments_pkey" PRIMARY KEY ("comment_id")
 );
@@ -55,16 +56,16 @@ CREATE UNIQUE INDEX "Cards_card_name_key" ON "Cards"("card_name");
 CREATE UNIQUE INDEX "Comments_comment_name_key" ON "Comments"("comment_name");
 
 -- AddForeignKey
-ALTER TABLE "Columns" ADD CONSTRAINT "Columns_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Columns" ADD CONSTRAINT "Columns_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Cards" ADD CONSTRAINT "Cards_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Cards" ADD CONSTRAINT "Cards_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Cards" ADD CONSTRAINT "Cards_column_id_fkey" FOREIGN KEY ("column_id") REFERENCES "Columns"("column_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comments" ADD CONSTRAINT "Comments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comments" ADD CONSTRAINT "Comments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comments" ADD CONSTRAINT "Comments_column_id_fkey" FOREIGN KEY ("column_id") REFERENCES "Columns"("column_id") ON DELETE CASCADE ON UPDATE CASCADE;
