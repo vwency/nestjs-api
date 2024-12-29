@@ -12,4 +12,4 @@ RUN npx prisma generate
 
 RUN yarn run build
 
-ENTRYPOINT ["yarn", "run", "start:prod"]
+ENTRYPOINT ["sh", "-c", "npx prisma migrate deploy && yarn run start:prod"]
