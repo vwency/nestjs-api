@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { GoogleStrategy } from './utils/GoogleStrategy'
-import { SessionSerializer } from './utils/Serializer'
+import { SessionSerializer } from '../Serializer'
 import { OAuthController } from './google-oauth.contoller'
 import { PassportModule } from '@nestjs/passport'
 
