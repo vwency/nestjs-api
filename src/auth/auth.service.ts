@@ -39,6 +39,19 @@ export class AuthService {
     return tokens
   }
 
+  async ValidateUser(dto: AuthDto): Promise<any> {
+    const User = await this.prisma.users.findUnique({
+      where: { username: dto.username },
+    })
+
+    if (!User) throw new ForbiddenException('Access Denied')
+
+    const passwordMatches = await argon.verify(User.hash, dto.password)
+    if (!passwordMatches) throw new ForbiddenException('Access Denied')
+
+    return User
+  }
+
   async signinLocal(dto: AuthDto): Promise<Tokens> {
     const User = await this.prisma.users.findUnique({
       where: { username: dto.username },

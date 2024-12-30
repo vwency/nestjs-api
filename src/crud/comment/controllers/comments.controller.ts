@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger'
 import { CommentsService } from '../services/comments.service'
 import { GetCurrentUserId } from 'src/auth/common/decorators'
-import { AtGuard } from 'src/auth/common/guards'
+import { AtGuard } from 'src/auth/guards'
 import { ParamDtoGetComment } from '../dto/Get/ParamGet.dto'
 import { ParamDtoCreateComment } from '../dto/Create/ParamCreateComment.dto'
 import { BodyDtoCreateComment } from '../dto/Create/BodyCreateComment.dto'
