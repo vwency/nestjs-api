@@ -9,6 +9,7 @@ import { LocalStrategy } from './strategies/local.strategy'
 
 @Module({
   imports: [
+    PassportModule.register({ session: true }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async () => ({}),

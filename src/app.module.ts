@@ -4,8 +4,7 @@ import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { CrudModule } from './crud/crud.module'
 import { ConfigModule } from '@nestjs/config'
-import { PassportModule } from '@nestjs/passport'
-import { OAuthModule } from './oath/oauth.module'
+import { OAuthModule } from './oauth/oauth.module'
 
 @Module({
   controllers: [AppController],
@@ -16,7 +15,6 @@ import { OAuthModule } from './oath/oauth.module'
       ignoreEnvFile: false,
       envFilePath: '.env',
     }),
-    PassportModule.register({ session: true }),
     AuthModule,
     CrudModule,
     OAuthModule,
