@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module'
 import { CrudModule } from './crud/crud.module'
 import { ConfigModule } from '@nestjs/config'
 import { PassportModule } from '@nestjs/passport'
-import { GoogleOAuthModule } from './oath/google/oauth.module'
+import { OAuthModule } from './oath/oauth.module'
 
 @Module({
   controllers: [AppController],
@@ -19,7 +19,7 @@ import { GoogleOAuthModule } from './oath/google/oauth.module'
     PassportModule.register({ session: true }),
     AuthModule,
     CrudModule,
-    GoogleOAuthModule,
+    OAuthModule,
   ],
 })
 export class AppModule {}
