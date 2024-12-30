@@ -27,11 +27,11 @@ export class AuthService {
 
     const user = await this.prisma.users.create({
       data: {
-        username: dto.username,
+        ...dto,
         hash: hash,
-        email: dto.email,
       },
     })
+
     return user
     // const tokens = await this.getTokens(user.user_id, user.username)
     // await this.updateRtHash(user.user_id, tokens.refresh_token)
@@ -134,5 +134,26 @@ export class AuthService {
       access_token: at,
       refresh_token: rt,
     }
+  }
+
+  async ValidateOAuthUser(dto: AuthDto): Promise<any> {
+    const User = await this.prisma.users.findUnique({
+      where: {
+        username: dto.username,
+      },
+    })
+
+    if (User) return User
+
+    const hash = await argon.hash(dto.password)
+    dto.password = undefined
+    const user = await this.prisma.users.create({
+      data: {
+        ...dto,
+        hash: hash,
+      },
+    })
+
+    return user
   }
 }
