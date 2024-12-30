@@ -14,7 +14,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async signupLocal(dto: AuthDto): Promise<Tokens> {
+  async signupLocal(dto: AuthDto): Promise<any> {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
@@ -32,11 +32,11 @@ export class AuthService {
         email: dto.email,
       },
     })
+    return user
+    // const tokens = await this.getTokens(user.user_id, user.username)
+    // await this.updateRtHash(user.user_id, tokens.refresh_token)
 
-    const tokens = await this.getTokens(user.user_id, user.username)
-    await this.updateRtHash(user.user_id, tokens.refresh_token)
-
-    return tokens
+    // return tokens
   }
 
   async ValidateUser(dto: AuthDto): Promise<any> {

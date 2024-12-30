@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Redirect,
   Req,
   UseGuards,
 } from '@nestjs/common'
@@ -26,7 +27,8 @@ export class AuthController {
   @Public()
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
-  async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  @Redirect('signin', HttpStatus.FOUND)
+  async signupLocal(@Body() dto: AuthDto): Promise<any> {
     return await this.authService.signupLocal(dto)
   }
 
