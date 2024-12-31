@@ -24,7 +24,7 @@ export class AuthService {
     if (User) throw { message: 'User already exists' }
 
     const hash = await argon.hash(dto.password)
-
+    dto.password = undefined
     const user = await this.prisma.users.create({
       data: {
         ...dto,
@@ -32,11 +32,10 @@ export class AuthService {
       },
     })
 
-    return user
-    // const tokens = await this.getTokens(user.user_id, user.username)
-    // await this.updateRtHash(user.user_id, tokens.refresh_token)
+    const tokens = await this.getTokens(user.user_id, user.username)
+    await this.updateRtHash(user.user_id, tokens.refresh_token)
 
-    // return tokens
+    return tokens
   }
 
   async ValidateUser(dto: AuthDto): Promise<any> {
