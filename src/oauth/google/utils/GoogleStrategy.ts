@@ -19,14 +19,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     console.log(refreshToken)
     console.log(profile)
 
-    const username = profile.name.givenName + ' ' + profile.name.familyName // Combining givenName and familyName for the username
-
-    // Extract email
-    const email = profile.emails[0].value
-    // const username = '';
-    // const email = '';
+    const firstName = profile.name?.givenName || ''
+    const lastName = profile.name?.familyName || ''
+    const username = `${firstName} ${lastName}`.trim()
     const password = ''
-
+    const email = profile.emails?.[0]?.value
     const user = await this.authservice.ValidateOAuthUser({
       username,
       password,

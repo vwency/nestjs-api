@@ -18,7 +18,7 @@ export class OAuthController {
     return { msg: 'OK' }
   }
 
-  @Get('status')
+  @Get('google/status')
   user(@Req() request: Request) {
     console.log(request.user)
     if (request.user) {
