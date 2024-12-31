@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger'
 import { CardService } from '../services/card.service'
 import { GetCurrentUserId } from 'src/auth/common/decorators'
-import { AtGuard } from 'src/auth/common/guards'
+import { AtGuard } from 'src/auth/auth/guards'
 import { ParamDtoGetCard } from '../dto/Get/ParamGetCard.dto'
 import { ParamDtoCreateCard } from '../dto/Create/ParamCreateCard.dto'
 import { BodyDtoCreateCard } from '../dto/Create/BodyCreateCard.dto'
