@@ -19,13 +19,23 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document)
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  })
+
   app.use(
     session({
       secret: 'asiodasjoddjdoasddasoidjasiodasdjaiodd',
       saveUninitialized: false,
       resave: false,
       cookie: {
-        maxAge: 60000,
+        SameSite: 'Lax',
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60 * 24 * 7,
       },
     }),
   )

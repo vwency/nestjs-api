@@ -12,7 +12,7 @@ import {
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
 import { Tokens } from './types'
-import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators'
+import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators'
 import { AtGuard, RtGuard } from './guards'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
