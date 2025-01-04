@@ -14,7 +14,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async signupLocal(dto: AuthDto): Promise<Tokens> {
+  async signupLocal(dto: AuthDto): Promise<any> {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
@@ -24,12 +24,11 @@ export class AuthService {
     if (User) throw { message: 'User already exists' }
 
     const hash = await argon.hash(dto.password)
-
+    dto.password = undefined
     const user = await this.prisma.users.create({
       data: {
-        username: dto.username,
+        ...dto,
         hash: hash,
-        email: dto.email,
       },
     })
 
@@ -37,6 +36,19 @@ export class AuthService {
     await this.updateRtHash(user.user_id, tokens.refresh_token)
 
     return tokens
+  }
+
+  async ValidateUser(dto: AuthDto): Promise<any> {
+    const User = await this.prisma.users.findUnique({
+      where: { username: dto.username },
+    })
+
+    if (!User) throw new ForbiddenException('Access Denied')
+
+    const passwordMatches = await argon.verify(User.hash, dto.password)
+    if (!passwordMatches) throw new ForbiddenException('Access Denied')
+
+    return User
   }
 
   async signinLocal(dto: AuthDto): Promise<Tokens> {
@@ -121,5 +133,26 @@ export class AuthService {
       access_token: at,
       refresh_token: rt,
     }
+  }
+
+  async ValidateOAuthUser(dto: AuthDto): Promise<any> {
+    const User = await this.prisma.users.findUnique({
+      where: {
+        username: dto.username,
+      },
+    })
+
+    if (User) return User
+
+    const hash = await argon.hash(dto.password)
+    dto.password = undefined
+    const user = await this.prisma.users.create({
+      data: {
+        ...dto,
+        hash: hash,
+      },
+    })
+
+    return user
   }
 }

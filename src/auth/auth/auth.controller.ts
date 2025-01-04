@@ -1,18 +1,22 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common'
 
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
 import { Tokens } from './types'
-import { GetCurrentUser, GetCurrentUserId, Public } from './common/decorators'
-import { AtGuard, RtGuard } from './common/guards'
+import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators'
+import { AtGuard, RtGuard } from './guards'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { Request } from 'express'
+import { LocalGuard } from './guards/local.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -22,16 +26,24 @@ export class AuthController {
   @Public()
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
-  async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  async signupLocal(@Body() dto: AuthDto): Promise<any> {
     return await this.authService.signupLocal(dto)
   }
 
   @ApiTags('Auth')
-  @Public()
   @Post('signin')
+  @UseGuards(LocalGuard)
   @HttpCode(HttpStatus.OK)
-  async signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return await this.authService.signinLocal(dto)
+  async signinLocal(@Req() req: Request): Promise<any> {
+    return req.user
+  }
+
+  @Get('status')
+  @UseGuards(AtGuard)
+  status(@Req() req: Request) {
+    console.log('Inside AuthController status method')
+    console.log(req.user)
+    return req.user
   }
 
   @ApiTags('Auth')
