@@ -1,19 +1,31 @@
-import { Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { ExtractJwt, Strategy } from 'passport-jwt'
-import { JwtPayload } from '../types'
+import { Strategy } from 'passport-custom' // Используем passport-custom для кастомной логики
+import { Request } from 'express'
 
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(config: ConfigService) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get<string>('AT_SECRET'),
-    })
+  constructor() {
+    super()
   }
 
-  validate(payload: JwtPayload) {
-    return payload
+  authenticate(req: Request) {
+    const user = req.user
+
+    if (!user) {
+      return this.fail('User not found in session', 401)
+    }
+
+    this.success(user)
+  }
+
+  async validate(req: Request) {
+    const user = req.user
+
+    if (!user) {
+      throw new UnauthorizedException('User not found in session')
+    }
+
+    return user
   }
 }

@@ -30,26 +30,22 @@ export class CommentsService {
     comDto.column_name = undefined
     comDto.card_name = undefined
 
-    const Comment = this.prisma.comments.create({
+    return this.prisma.comments.create({
       data: {
         ...comDto,
       },
     })
-
-    return Comment
   }
 
   async deleteComment(params: ParamDtoDeleteComment): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma)
     const { comment } = await crudLogic.findColumnCardComment(params, true)
 
-    const DeletedComment = await this.prisma.comments.delete({
+    return await this.prisma.comments.delete({
       where: {
         comment_id: comment.comment_id,
       },
     })
-
-    return DeletedComment
   }
 
   async updateComment(
@@ -60,13 +56,11 @@ export class CommentsService {
 
     const { comment } = await crudLogic.findColumnCardComment(params, true)
 
-    const updatedComment = await this.prisma.comments.update({
+    return await this.prisma.comments.update({
       where: {
         comment_id: comment.comment_id,
       },
       data: updatePayload,
     })
-
-    return updatedComment
   }
 }

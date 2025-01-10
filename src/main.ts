@@ -47,4 +47,11 @@ async function bootstrap() {
 
   await app.listen(3000)
 }
+
 bootstrap()
+  .then(() => {
+    console.log('NestJS application has started successfully!')
+  })
+  .catch((error) => {
+    console.error('Error during bootstrap:', error)
+  })

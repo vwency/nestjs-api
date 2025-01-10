@@ -8,7 +8,7 @@ export class AtGuard extends AuthGuard('jwt') {
     super()
   }
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride('isPublic', [
       context.getHandler(),
       context.getClass(),
@@ -16,6 +16,9 @@ export class AtGuard extends AuthGuard('jwt') {
 
     if (isPublic) return true
 
-    return super.canActivate(context)
+    const activate = (await super.canActivate(context)) as boolean
+    const request = context.switchToHttp().getRequest()
+    await super.logIn(request)
+    return activate
   }
 }

@@ -5,6 +5,7 @@ import * as argon from 'argon2'
 import { AuthDto } from './dto'
 import { JwtPayload, Tokens } from './types'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { request } from 'express'
 
 @Injectable()
 export class AuthService {
@@ -35,6 +36,8 @@ export class AuthService {
     const tokens = await this.getTokens(user.user_id, user.username)
     await this.updateRtHash(user.user_id, tokens.refresh_token)
 
+    request.user = { ...User }
+
     return tokens
   }
 
@@ -63,6 +66,8 @@ export class AuthService {
 
     const tokens = await this.getTokens(User.user_id, User.username)
     await this.updateRtHash(User.user_id, tokens.refresh_token)
+
+    request.user = { ...User }
 
     return tokens
   }

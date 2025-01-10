@@ -25,13 +25,11 @@ export class ColumnService {
 
     if (!column) throw new NotFoundException('Column not founded')
 
-    const deletedColumn = await this.prisma.columns.delete({
+    return await this.prisma.columns.delete({
       where: {
         column_id: column.column_id,
       },
     })
-
-    return deletedColumn
   }
 
   async createColumn(ColumnDto: DtoCreateColumn): Promise<any> {
@@ -39,13 +37,11 @@ export class ColumnService {
 
     if (column) throw new NotFoundException('Column existed found')
 
-    const createdColumn = await this.prisma.columns.create({
+    return await this.prisma.columns.create({
       data: {
         ...ColumnDto,
       },
     })
-
-    return createdColumn
   }
 
   async updateColumn(
@@ -56,13 +52,11 @@ export class ColumnService {
 
     if (!column) throw new NotFoundException('Column not found')
 
-    const updatedColumn = await this.prisma.columns.update({
+    return await this.prisma.columns.update({
       where: { ...column },
       data: {
         ...updatePayload,
       },
     })
-
-    return updatedColumn
   }
 }

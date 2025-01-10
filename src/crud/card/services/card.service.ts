@@ -28,26 +28,22 @@ export class CardService {
 
     const payload: ParamBDtoCard = cardDto
 
-    const Card = await this.prisma.cards.create({
+    return await this.prisma.cards.create({
       data: {
         ...payload,
       },
     })
-
-    return Card
   }
 
   async deleteCard(cardDto: ParamDtoDeleteCard): Promise<any> {
     const crudLogic = new CrudLogic(this.prisma)
     const { card } = await crudLogic.findColumnCard(cardDto, true)
 
-    const deletedCard = await this.prisma.cards.delete({
+    return await this.prisma.cards.delete({
       where: {
         card_id: card.card_id,
       },
     })
-
-    return deletedCard
   }
 
   async updateCard(params: ParamDtoUpdateCard, updatePayload: BodyCardDto) {
@@ -55,13 +51,11 @@ export class CardService {
 
     const { card } = await crudLogic.findColumnCard(params, true)
 
-    const updatedCard = await this.prisma.cards.update({
+    return await this.prisma.cards.update({
       where: {
         card_id: card.card_id,
       },
       data: updatePayload,
     })
-
-    return updatedCard
   }
 }
