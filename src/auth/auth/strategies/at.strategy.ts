@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { Strategy } from 'passport-custom' // Используем passport-custom для кастомной логики
+import { Strategy } from 'passport-custom'
 import { Request } from 'express'
 
 @Injectable()
