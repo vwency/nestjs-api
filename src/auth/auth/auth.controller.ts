@@ -24,14 +24,14 @@ export class AuthController {
 
   @ApiTags('Auth')
   @Public()
-  @Post('signup')
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async signupLocal(@Body() dto: AuthDto): Promise<any> {
     return await this.authService.signupLocal(dto)
   }
 
   @ApiTags('Auth')
-  @Post('signin')
+  @Post('login')
   @UseGuards(LocalGuard)
   @HttpCode(HttpStatus.OK)
   async signinLocal(@Req() req: Request): Promise<any> {
