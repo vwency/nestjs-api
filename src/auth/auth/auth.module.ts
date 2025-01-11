@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { AtStrategy, RtStrategy } from './strategies'
+import { AtStrategy } from './strategies'
 import { ConfigModule } from '@nestjs/config'
 import { LocalStrategy } from './strategies/local.strategy'
 
@@ -17,6 +17,6 @@ import { LocalStrategy } from './strategies/local.strategy'
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AtStrategy, RtStrategy, LocalStrategy],
+  providers: [AuthService, AtStrategy, LocalStrategy],
 })
 export class AuthModule {}

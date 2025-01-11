@@ -11,9 +11,8 @@ import {
 
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
-import { Tokens } from './types'
-import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators'
-import { AtGuard, RtGuard } from './guards'
+import { Public } from '../common/decorators'
+import { AtGuard } from './guards'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
 import { LocalGuard } from './guards/local.guard'
@@ -51,19 +50,7 @@ export class AuthController {
   @Post('logout')
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)
-  async logout(@GetCurrentUserId() userId: string): Promise<boolean> {
-    return await this.authService.logout(userId)
-  }
-
-  @ApiTags('Auth')
-  @Public()
-  @UseGuards(RtGuard)
-  @Post('refresh')
-  @HttpCode(HttpStatus.OK)
-  async refreshTokens(
-    @GetCurrentUserId() userId: string,
-    @GetCurrentUser('refreshToken') refreshToken: string,
-  ): Promise<Tokens> {
-    return await this.authService.refreshTokens(userId, refreshToken)
+  async logout(@Req() req: Request): Promise<boolean> {
+    return await this.authService.logout(req)
   }
 }

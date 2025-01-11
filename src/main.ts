@@ -4,8 +4,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as session from 'express-session'
 import * as passport from 'passport'
 import * as cookieParser from 'cookie-parser'
+import * as cliColor from 'cli-color'
 
 async function bootstrap() {
+  console.log(cliColor.green('✅ NestJS application is starting...'))
+
   const app = await NestFactory.create(AppModule)
   const config = new DocumentBuilder()
     .setTitle('Nest js api')
@@ -16,6 +19,7 @@ async function bootstrap() {
     )
     .setVersion('0.1.2')
     .build()
+
   const document = SwaggerModule.createDocument(app, config)
 
   SwaggerModule.setup('api', app, document)
@@ -35,7 +39,7 @@ async function bootstrap() {
       saveUninitialized: false,
       resave: false,
       cookie: {
-        SameSite: 'Lax',
+        sameSite: 'lax',
         httpOnly: true,
         secure: false,
         maxAge: 60 * 60 * 24 * 7,
@@ -50,8 +54,10 @@ async function bootstrap() {
 
 bootstrap()
   .then(() => {
-    console.log('NestJS application has started successfully!')
+    console.log(
+      cliColor.blue('🌐 Application is running on: http://localhost:3000'),
+    )
   })
   .catch((error) => {
-    console.error('Error during bootstrap:', error)
+    console.error(cliColor.red('❌ Error during bootstrap:'), error)
   })

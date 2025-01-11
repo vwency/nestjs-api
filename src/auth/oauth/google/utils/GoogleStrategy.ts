@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Profile, Strategy } from 'passport-google-oauth20'
 import { AuthService } from 'src/auth/auth/auth.service'
+import { GoogleProfileService } from './Google.service'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
-  constructor(private authservice: AuthService) {
+  constructor(
+    private authservice: AuthService,
+    private googleProfileService: GoogleProfileService,
+  ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -19,16 +23,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     console.log(refreshToken)
     console.log(profile)
 
-    const firstName = profile.name?.givenName || ''
-    const lastName = profile.name?.familyName || ''
-    const username = `${firstName} ${lastName}`.trim()
-    const password = ''
-    const email = profile.emails?.[0]?.value
+    const { username, email, password } =
+      this.googleProfileService.extractUserData(profile)
+
     const user = await this.authservice.ValidateOAuthUser({
       username,
       password,
       email,
     })
+
     return user
   }
 }
