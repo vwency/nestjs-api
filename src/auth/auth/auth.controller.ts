@@ -37,6 +37,7 @@ export class AuthController {
     return req.user
   }
 
+  @ApiTags('Auth')
   @Get('status')
   @UseGuards(AtGuard)
   async status(@Req() req: Request) {
@@ -47,7 +48,7 @@ export class AuthController {
 
   @ApiTags('Auth')
   @ApiBearerAuth()
-  @Post('logout')
+  @Get('logout')
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@Req() req: Request): Promise<boolean> {
