@@ -21,19 +21,17 @@ export class CrudLogic {
   ): Promise<Partial<T>> {
     const instance = plainToClass(dto, {})
     const prototype = Object.keys(instance)
-    const filteredParams = Object.keys(params)
+    return Object.keys(params)
       .filter((key) => prototype.includes(key))
       .reduce((acc, key) => {
         acc[key] = params[key]
         return acc
       }, {} as Partial<T>)
-
-    return filteredParams
   }
 
   async findComment(params: ParamBDtoComment) {
     const filteredParams = await this.filterParams(ParamBDtoComment, params)
-    return await this.prisma.comments.findFirst({
+    return this.prisma.comments.findFirst({
       where: { ...filteredParams },
     })
   }
@@ -41,21 +39,21 @@ export class CrudLogic {
   async findCard(params: ParamBDtoCard): Promise<any> {
     const filteredParams = await this.filterParams(ParamBDtoCard, params)
 
-    return await this.prisma.cards.findFirst({
+    return this.prisma.cards.findFirst({
       where: { ...filteredParams },
     })
   }
 
   async findColumn(params: ParamBDtoColumn) {
     const filteredParams = await this.filterParams(ParamBDtoColumn, params)
-    return await this.prisma.columns.findFirst({
+    return this.prisma.columns.findFirst({
       where: { ...filteredParams },
     })
   }
 
   async findUser(params: ParamDtoUser) {
     const filteredParams = await this.filterParams(ParamDtoUser, params)
-    return await this.prisma.users.findFirst({
+    return this.prisma.users.findFirst({
       where: { ...filteredParams },
     })
   }

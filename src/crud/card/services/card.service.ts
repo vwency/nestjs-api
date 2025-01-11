@@ -28,7 +28,7 @@ export class CardService {
 
     const payload: ParamBDtoCard = cardDto
 
-    return await this.prisma.cards.create({
+    return this.prisma.cards.create({
       data: {
         ...payload,
       },
@@ -39,7 +39,7 @@ export class CardService {
     const crudLogic = new CrudLogic(this.prisma)
     const { card } = await crudLogic.findColumnCard(cardDto, true)
 
-    return await this.prisma.cards.delete({
+    return this.prisma.cards.delete({
       where: {
         card_id: card.card_id,
       },
@@ -51,7 +51,7 @@ export class CardService {
 
     const { card } = await crudLogic.findColumnCard(params, true)
 
-    return await this.prisma.cards.update({
+    return this.prisma.cards.update({
       where: {
         card_id: card.card_id,
       },

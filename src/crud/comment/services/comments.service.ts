@@ -41,7 +41,7 @@ export class CommentsService {
     const crudLogic = new CrudLogic(this.prisma)
     const { comment } = await crudLogic.findColumnCardComment(params, true)
 
-    return await this.prisma.comments.delete({
+    return this.prisma.comments.delete({
       where: {
         comment_id: comment.comment_id,
       },
@@ -56,7 +56,7 @@ export class CommentsService {
 
     const { comment } = await crudLogic.findColumnCardComment(params, true)
 
-    return await this.prisma.comments.update({
+    return this.prisma.comments.update({
       where: {
         comment_id: comment.comment_id,
       },

@@ -25,7 +25,7 @@ export class ColumnService {
 
     if (!column) throw new NotFoundException('Column not founded')
 
-    return await this.prisma.columns.delete({
+    return this.prisma.columns.delete({
       where: {
         column_id: column.column_id,
       },
@@ -37,7 +37,7 @@ export class ColumnService {
 
     if (column) throw new NotFoundException('Column existed found')
 
-    return await this.prisma.columns.create({
+    return this.prisma.columns.create({
       data: {
         ...ColumnDto,
       },
@@ -52,7 +52,7 @@ export class ColumnService {
 
     if (!column) throw new NotFoundException('Column not found')
 
-    return await this.prisma.columns.update({
+    return this.prisma.columns.update({
       where: { ...column },
       data: {
         ...updatePayload,
