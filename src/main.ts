@@ -13,9 +13,12 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Nest js api')
     .setDescription(
-      `nest-js boilerplate
-      prismaORM 
-      PostgreSQL JwtAuth`,
+      `
+      Nest-js boilerplate
+      PrismaORM 
+      Postgres 
+      Express-session
+      `,
     )
     .setVersion('0.1.2')
     .build()

@@ -4,6 +4,7 @@
 
 1) boilerplate
 2) prismaORM
+3) express-session
 
 ### Deploy or prod run
 
@@ -17,6 +18,7 @@ dnf install direnv      Fedora
 zypper install direnv   openSUSE  
 ```
 
+touch .envrc
 ```
 export SECRET_KEY="abc123"
 export DATABASE_TYPE="postgres"

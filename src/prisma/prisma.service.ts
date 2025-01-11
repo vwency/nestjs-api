@@ -1,22 +1,13 @@
 import { PrismaClient } from '.prisma/client'
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor(config: ConfigService) {
-    const url = config.get<string>('DATABASE_URL')
-
-    super({
-      datasources: {
-        db: {
-          url,
-        },
-      },
-    })
+  constructor() {
+    super({})
   }
 
   async onModuleInit() {
