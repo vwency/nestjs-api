@@ -4,18 +4,10 @@ import { SessionSerializer } from '../../serializer/Serializer'
 import { OAuthController } from './google-oauth.contoller'
 import { PassportModule } from '@nestjs/passport'
 import { AuthService } from 'src/auth/auth/auth.service'
-import { JwtModule } from '@nestjs/jwt'
-import { ConfigModule } from '@nestjs/config'
 import { GoogleProfileService } from './utils/Google.service'
 
 @Module({
-  imports: [
-    PassportModule.register({ session: true }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async () => ({}),
-    }),
-  ],
+  imports: [PassportModule.register({ session: true })],
   controllers: [OAuthController],
   providers: [
     GoogleStrategy,
