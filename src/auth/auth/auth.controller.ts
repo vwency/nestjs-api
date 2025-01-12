@@ -38,6 +38,7 @@ export class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiBearerAuth()
   @Get('status')
   @UseGuards(AtGuard)
   async status(@Req() req: Request) {

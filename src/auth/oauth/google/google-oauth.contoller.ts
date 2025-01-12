@@ -1,7 +1,7 @@
 import { Controller, Get, Redirect, Req, UseGuards } from '@nestjs/common'
 import { GoogleAuthGuard } from './utils/Guards'
 import { Request } from 'express'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
 @Controller('auth')
 export class OAuthController {
@@ -23,6 +23,7 @@ export class OAuthController {
   }
 
   @ApiTags('OAuth2-google')
+  @ApiBearerAuth()
   @Get('google/status')
   user(@Req() request: Request) {
     console.log(request.user)
