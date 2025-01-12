@@ -11,7 +11,6 @@ import {
 
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
-import { Public } from '../common/decorators'
 import { AtGuard } from './guards'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
@@ -22,7 +21,6 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiTags('Auth')
-  @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async signupLocal(@Body() dto: AuthDto): Promise<any> {
