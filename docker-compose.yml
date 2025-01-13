@@ -1,9 +1,6 @@
 services:
   postgres:
-    build:
-      context: database
-      dockerfile: Dockerfile
-    image: ninja666/pg:latest
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
     environment:
       POSTGRES_USERNAME: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -19,10 +16,7 @@ services:
 
 
   nestjs:
-    build:
-      context: .  
-      dockerfile: Dockerfile  
-    image: ninja666/nestjs-app:latest
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
     env_file:
       - prod.env  
     ports:
