@@ -12,6 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    environment: deploy
+    
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DATABASE_TYPE: ${{ secrets.DATABASE_TYPE }}
@@ -23,20 +25,24 @@ jobs:
       AT_SECRET: ${{ secrets.AT_SECRET }}
       RT_SECRET: ${{ secrets.RT_SECRET }}
       PGDATA: ${{ secrets.PGDATA }}
-      BACKEND_PORT: ${{ secrets.BACKEND_PORT }}   
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}  
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}  
-      GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}  
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}  
+      BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      
+
     steps:
+
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
