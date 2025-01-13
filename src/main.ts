@@ -9,6 +9,8 @@ import * as cliColor from 'cli-color'
 async function bootstrap() {
   console.log(cliColor.green('✅ NestJS application is starting...'))
 
+  console.log()
+
   const app = await NestFactory.create(AppModule)
   const config = new DocumentBuilder()
     .setTitle('Nest js api')
@@ -57,9 +59,12 @@ async function bootstrap() {
 
 bootstrap()
   .then(() => {
+    console.log()
+
     console.log(
       cliColor.blue('🌐 Application is running on: http://localhost:3000'),
     )
+    console.log()
   })
   .catch((error) => {
     console.error(cliColor.red('❌ Error during bootstrap:'), error)
