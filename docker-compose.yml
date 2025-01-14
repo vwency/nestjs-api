@@ -1,6 +1,9 @@
 services:
   postgres:
-    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    image: ghcr.io/vwency/nestjs-api/pg:b78c388
     environment:
       POSTGRES_USERNAME: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -16,7 +19,10 @@ services:
 
 
   nestjs:
-    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/vwency/nestjs-api/nest-api:b78c388
     env_file:
       - prod.env  
     ports:
