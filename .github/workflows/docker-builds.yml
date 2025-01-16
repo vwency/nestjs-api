@@ -82,7 +82,7 @@ jobs:
 
       - name: Build and push pg
         run: |
-          /kaniko/executor --dockerfile="./database/Dockerfile" \
+          /kaniko/executor --dockerfile="database/Dockerfile" \
             --context="${{ github.repositoryUrl }}#${{ github.ref_name }}#${{ github.sha }}"  \
             --destination="$GH_REGISTRY/$IMAGE_NAME:$(echo ${GITHUB_SHA} | head -c 7)" \
 
