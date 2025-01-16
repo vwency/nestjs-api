@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Profile, Strategy } from 'passport-google-oauth20'
 import { AuthService } from 'src/auth/auth/auth.service'
-import { GoogleProfileService } from './Google.service'
+import { GoogleProfileService } from './google.service'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
