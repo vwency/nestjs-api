@@ -5,7 +5,7 @@ import { GithubOAuthService } from './github.service'
 import { AuthService } from 'src/auth/auth/auth.service'
 
 @Injectable()
-export class GithubOauthStrategy extends PassportStrategy(Strategy, 'github') {
+export class GithubOauthStrategy extends PassportStrategy(Strategy) {
   constructor(
     private githubProfileService: GithubOAuthService,
     private authservice: AuthService,
@@ -18,11 +18,7 @@ export class GithubOauthStrategy extends PassportStrategy(Strategy, 'github') {
     })
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: any,
-  ): Promise<any> {
+  async validate(accessToken: string, refreshToken: string, profile: any) {
     const { username, email, password } =
       this.githubProfileService.extractUserData(profile)
 
