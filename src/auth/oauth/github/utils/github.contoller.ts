@@ -1,6 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { GithubOAuthService } from './github-oauth.service'
+import { GithubOAuthService } from './github.service'
+import { request, Request } from 'express'
 
 @Controller('auth')
 export class GithubOAuthController {
@@ -18,7 +19,13 @@ export class GithubOAuthController {
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
-  async githubCallback(@Req() req: any): Promise<any> {
+  async githubCallback(@Req() req: Request): Promise<any> {
     return this.authService.getUserInfo(req.user)
+  }
+
+  @Get('github/profile')
+  async getProfile(@Req() req: Request) {
+    console.log(request.user)
+    return req.user
   }
 }

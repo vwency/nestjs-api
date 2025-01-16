@@ -69,18 +69,24 @@ export class AuthService {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
+        email: dto.email,
       },
     })
 
-    if (User) return User
+    if (User) {
+      return User
+    }
 
     const hash = await argon.hash(dto.password)
     dto.password = undefined
-    return this.prisma.users.create({
+
+    const user = this.prisma.users.create({
       data: {
         ...dto,
         hash: hash,
       },
     })
+
+    return user
   }
 }
