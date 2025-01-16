@@ -14,7 +14,6 @@ import { AuthDto } from './dto'
 import { AtGuard } from './guards'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
-import { LocalGuard } from './guards/local.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -23,16 +22,15 @@ export class AuthController {
   @ApiTags('Auth')
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async signupLocal(@Body() dto: AuthDto): Promise<any> {
-    return await this.authService.signupLocal(dto)
+  async signupLocal(@Body() dto: AuthDto, @Req() req: Request): Promise<any> {
+    return await this.authService.signupLocal(dto, req)
   }
 
   @ApiTags('Auth')
   @Post('login')
-  @UseGuards(LocalGuard)
   @HttpCode(HttpStatus.OK)
-  async signinLocal(@Req() req: Request): Promise<any> {
-    return req.user
+  async signinLocal(@Body() dto: AuthDto, @Req() req: Request): Promise<any> {
+    return await this.authService.signinLocal(dto, req)
   }
 
   @ApiTags('Auth')
@@ -40,9 +38,7 @@ export class AuthController {
   @Get('status')
   @UseGuards(AtGuard)
   async status(@Req() req: Request) {
-    console.log('Inside AuthController status method')
-    console.log(req.user)
-    return req.user
+    return req.session.user
   }
 
   @ApiTags('Auth')
