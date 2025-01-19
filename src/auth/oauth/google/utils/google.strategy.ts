@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Profile, Strategy } from 'passport-google-oauth20'
 import { AuthService } from 'src/auth/auth/auth.service'
 import { GoogleProfileService } from './google.service'
+import { request } from 'express'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -26,11 +27,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const { username, email, password } =
       this.googleProfileService.extractUserData(profile)
 
-    const user = await this.authservice.ValidateOAuthUser({
-      username,
-      password,
-      email,
-    })
+    const req = request
+
+    const user = await this.authservice.ValidateOAuthUser(
+      {
+        username,
+        password,
+        email,
+      },
+      req,
+    )
 
     return user
   }

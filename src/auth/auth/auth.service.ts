@@ -72,7 +72,7 @@ export class AuthService {
     return true
   }
 
-  async ValidateOAuthUser(dto: AuthDto): Promise<any> {
+  async ValidateOAuthUser(dto: AuthDto, req: Request): Promise<any> {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
@@ -81,18 +81,29 @@ export class AuthService {
     })
 
     if (User) {
+      req.session.user = User
+      await new Promise((resolve, reject) =>
+        req.session.save((err) => (err ? reject(err) : resolve(true))),
+      )
       return User
     }
 
     const hash = await argon.hash(dto.password)
     dto.password = undefined
 
-    const user = this.prisma.users.create({
+    const user = await this.prisma.users.create({
       data: {
         ...dto,
         hash: hash,
       },
     })
+
+    if (user) {
+      req.session.user = user
+      await new Promise((resolve, reject) =>
+        req.session.save((err) => (err ? reject(err) : resolve(true))),
+      )
+    }
 
     return user
   }

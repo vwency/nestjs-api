@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
-import { GithubOAuthService } from './utils/github.service'
-import { GithubOAuthController } from './utils/github.contoller'
-import { GithubOauthStrategy } from './utils/github.strategy'
+import { GithubOAuthService } from './github.service'
+import { GithubOAuthController } from './github.contoller'
 import { SessionSerializer } from 'src/auth/serializer/Serializer'
 import { AuthService } from 'src/auth/auth/auth.service'
 
@@ -10,11 +9,6 @@ import { AuthService } from 'src/auth/auth/auth.service'
   imports: [PassportModule.register({ session: true })],
 
   controllers: [GithubOAuthController],
-  providers: [
-    GithubOAuthService,
-    GithubOauthStrategy,
-    SessionSerializer,
-    AuthService,
-  ],
+  providers: [GithubOAuthService, SessionSerializer, AuthService],
 })
 export class GithubOAuthModule {}
