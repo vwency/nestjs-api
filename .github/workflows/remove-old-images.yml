@@ -1,0 +1,58 @@
+name: Delete Old Docker Image
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  delete-old-pg-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Get previous commit SHA
+        id: get_previous_commit
+        run: |
+          echo "::set-output name=sha::$(git rev-parse HEAD^)"
+
+      - name: Delete old Docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IMAGE_NAME="${{ github.repository }}/pg"
+          TAG="${{ steps.get_previous_commit.outputs.sha }}"
+          echo "Deleting image $IMAGE_NAME:$TAG"
+          curl -X DELETE \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/packages/container/$IMAGE_NAME/versions/$TAG"
+
+
+  delete-old-nestjs-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Get previous commit SHA
+        id: get_previous_commit
+        run: |
+          echo "::set-output name=sha::$(git rev-parse HEAD^)"
+
+      - name: Delete old Docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IMAGE_NAME="${{ github.repository }}/nest-api"
+          TAG="${{ steps.get_previous_commit.outputs.sha }}"
+          echo "Deleting image $IMAGE_NAME:$TAG"
+          curl -X DELETE \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/packages/container/$IMAGE_NAME/versions/$TAG"
