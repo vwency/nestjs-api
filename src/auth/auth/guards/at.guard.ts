@@ -1,12 +1,13 @@
-import { ExecutionContext, Injectable } from '@nestjs/common'
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthGuard } from '@nestjs/passport'
 
 @Injectable()
-export class AtGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
-    super()
-  }
+export class AtGuard {
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride('isPublic', [
@@ -16,9 +17,13 @@ export class AtGuard extends AuthGuard('jwt') {
 
     if (isPublic) return true
 
-    const activate = (await super.canActivate(context)) as boolean
     const request = context.switchToHttp().getRequest()
-    await super.logIn(request)
-    return activate
+
+    const user = request.session.user
+    if (!user) {
+      throw new UnauthorizedException('User not found in session')
+    }
+
+    return true
   }
 }

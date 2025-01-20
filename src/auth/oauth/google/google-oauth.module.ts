@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { GoogleStrategy } from './utils/GoogleStrategy'
+import { GoogleStrategy } from './utils/google.strategy'
 import { SessionSerializer } from '../../serializer/Serializer'
 import { OAuthController } from './google-oauth.contoller'
 import { PassportModule } from '@nestjs/passport'
 import { AuthService } from 'src/auth/auth/auth.service'
-import { GoogleProfileService } from './utils/Google.service'
+import { GoogleProfileService } from './utils/google.service'
 
 @Module({
   imports: [PassportModule.register({ session: true })],
