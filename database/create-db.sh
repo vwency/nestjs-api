@@ -6,5 +6,5 @@ until pg_isready -U "$POSTGRES_USER"; do
 done
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --no-password <<-EOSQL
-    CREATE DATABASE pure;
+    CREATE DATABASE "$DATABASE_NAME";
 EOSQL
