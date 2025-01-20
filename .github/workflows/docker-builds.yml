@@ -57,9 +57,7 @@ jobs:
       packages: write 
 
     environment: deploy
-    env:
-      DATABASE_NAME: ${{ env.DATABASE_NAME }}
-      
+    
     steps:
 
 
