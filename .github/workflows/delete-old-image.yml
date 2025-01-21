@@ -1,0 +1,34 @@
+name: Delete Old Docker Image
+
+on:
+  workflow_dispatch:  
+
+jobs:
+
+  cleanup-nestjs:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Cleanup Docker images from GHCR
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          owner: ${{ github.repository_owner }}
+          repository: nestjs-api
+          keep-n-tagged: 1
+          package: nestjs-api/nest-api
+          dry-run: false
+
+  cleanup-nestpg:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Cleanup Docker images from GHCR
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          owner: ${{ github.repository_owner }}
+          repository: nestjs-api
+          keep-n-tagged: 1
+          package: nestjs-api/pg
+          dry-run: false
