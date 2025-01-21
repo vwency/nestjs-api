@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common'
 import * as argon from 'argon2'
 import { AuthDto } from './dto'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -22,7 +26,7 @@ export class AuthService {
     const hash = await argon.hash(dto.password)
     dto.password = undefined
 
-    req.user = { ...User }
+    await this.saveSession(req, User)
 
     return this.prisma.users.create({
       data: {
@@ -46,29 +50,15 @@ export class AuthService {
   }
 
   async signinLocal(dto: AuthDto, req: Request): Promise<Users> {
-    const User = await this.prisma.users.findUnique({
-      where: { username: dto.username },
-    })
+    const User = await this.ValidateUser(dto)
 
-    if (!User) throw new ForbiddenException('Access Denied')
-
-    const passwordMatches = await argon.verify(User.hash, dto.password)
-    if (!passwordMatches) throw new ForbiddenException('Access Denied')
-
-    req.session.user = { ...User }
-
-    await new Promise((resolve, reject) => {
-      req.session.save((err) => {
-        if (err) reject(err)
-        else resolve(true)
-      })
-    })
+    await this.saveSession(req, User)
 
     return User
   }
 
   async logout(req: Request): Promise<boolean> {
-    req.user = undefined
+    req.session.user = null
     return true
   }
 
@@ -81,10 +71,7 @@ export class AuthService {
     })
 
     if (User) {
-      req.session.user = User
-      await new Promise((resolve, reject) =>
-        req.session.save((err) => (err ? reject(err) : resolve(true))),
-      )
+      await this.saveSession(req, User)
       return User
     }
 
@@ -99,12 +86,20 @@ export class AuthService {
     })
 
     if (user) {
-      req.session.user = user
-      await new Promise((resolve, reject) =>
-        req.session.save((err) => (err ? reject(err) : resolve(true))),
-      )
+      await this.saveSession(req, User)
+      return user
     }
+    return new BadRequestException()
+  }
 
-    return user
+  private saveSession(req: Request, user: Users): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      req.session.user = { ...user }
+
+      req.session.save((err) => {
+        if (err) reject(err)
+        else resolve(true)
+      })
+    })
   }
 }

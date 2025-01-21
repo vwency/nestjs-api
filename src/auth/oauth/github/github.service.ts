@@ -1,87 +1,69 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
-import axios from 'axios'
+import { OAuthService } from '../oauth.service'
 import { AuthService } from 'src/auth/auth/auth.service'
 import { Request } from 'express'
 
 @Injectable()
 export class GithubOAuthService {
-  constructor(private authservice: AuthService) {}
+  constructor(
+    private oauthService: OAuthService,
+    private authservice: AuthService,
+  ) {}
 
   private readonly GITHUB_TOKEN_URL =
     'https://github.com/login/oauth/access_token'
   private readonly GITHUB_USER_URL = 'https://api.github.com/user'
+  private readonly GITHUB_EMAILS_URL = 'https://api.github.com/user/emails'
 
-  async authenticateWithGithub(code: string, req: Request): Promise<any> {
+  async authenticate(code: string, req: Request): Promise<any> {
     try {
-      const tokenResponse = await axios.post(
+      const tokenResponse = await this.oauthService.getToken(
         this.GITHUB_TOKEN_URL,
         {
           client_id: process.env.GITHUB_CLIENT_ID,
           client_secret: process.env.GITHUB_CLIENT_SECRET,
           code,
         },
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        },
       )
 
-      if (tokenResponse.data.error) {
-        throw new HttpException(
-          tokenResponse.data.error_description,
-          HttpStatus.BAD_REQUEST,
-        )
-      }
+      const accessToken = tokenResponse.access_token
 
-      const accessToken = tokenResponse.data.access_token
+      const user = await this.getUserData(accessToken)
 
-      const userResponse = await axios.get(this.GITHUB_USER_URL, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      console.log('USER', user)
 
-      if (!userResponse.data) {
-        throw new HttpException(
-          'Failed to fetch user profile',
-          HttpStatus.BAD_REQUEST,
-        )
-      }
-
-      let email = userResponse.data.email
-      if (!email) {
-        const emailsResponse = await axios.get(
-          'https://api.github.com/user/emails',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        )
-
-        const primaryEmail = emailsResponse.data.find(
-          (emailObj: any) => emailObj.primary && emailObj.verified,
-        )
-        email = primaryEmail?.email || null
-      }
-
-      let user = {
-        username: userResponse.data.login,
-        email: email,
-        password: ' ',
-      }
-
-      console.log(user)
-
-      user = await this.authservice.ValidateOAuthUser(user, req)
-
-      return user
+      return this.authservice.ValidateOAuthUser(user, req)
     } catch (error) {
       throw new HttpException(
         error.response?.data?.message || error.message,
         HttpStatus.INTERNAL_SERVER_ERROR,
       )
+    }
+  }
+
+  private async getUserData(accessToken: string): Promise<any> {
+    const userResponse = await this.oauthService.getProfile(
+      this.GITHUB_USER_URL,
+      accessToken,
+    )
+
+    let email = userResponse.email
+
+    if (!email) {
+      const emailsResponse = await this.oauthService.getProfile(
+        this.GITHUB_EMAILS_URL,
+        accessToken,
+      )
+      const primaryEmail = emailsResponse.find(
+        (emailObj: any) => emailObj.primary && emailObj.verified,
+      )
+      email = primaryEmail?.email || null
+    }
+
+    return {
+      username: userResponse.login,
+      email,
+      password: ' ',
     }
   }
 }

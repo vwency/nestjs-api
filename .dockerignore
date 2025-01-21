@@ -1,2 +1,10 @@
 .dockerignore
 node_modules
+.envrc
+.eslintrc.js
+.prettierrc
+commitlint.config.js
+docker-compose.yml
+README.md
+prod.env
+yarn.lock
