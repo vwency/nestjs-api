@@ -40,9 +40,10 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'asiodasjoddjdoasddasoidjasiodasdjaiodd',
+      secret: process.env.EXPRESS_TOKEN,
       saveUninitialized: false,
       resave: false,
+      name: 'user-session',
       cookie: {
         sameSite: 'lax',
         httpOnly: true,
