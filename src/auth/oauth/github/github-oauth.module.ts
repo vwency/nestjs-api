@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common'
-import { OAuthController } from './google.contoller'
 import { PassportModule } from '@nestjs/passport'
+import { GithubOAuthService } from './github.service'
+import { GithubController } from './github.contoller'
 import { AuthService } from 'src/auth/auth/auth.service'
-import { GoogleOAuthService } from './google.service'
 import { OAuthService } from '../oauth.service'
 
 @Module({
   imports: [PassportModule.register({ session: true })],
-  controllers: [OAuthController],
-  providers: [AuthService, OAuthService, GoogleOAuthService],
+  controllers: [GithubController],
+  providers: [GithubOAuthService, AuthService, OAuthService],
 })
-export class GoogleOAuthModule {}
+export class GithubOAuthModule {}

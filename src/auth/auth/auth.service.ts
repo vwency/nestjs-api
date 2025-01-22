@@ -1,15 +1,19 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common'
 import * as argon from 'argon2'
 import { AuthDto } from './dto'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { Request, request } from 'express'
+import { Request } from 'express'
 import { Users } from '@prisma/client'
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  async signupLocal(dto: AuthDto): Promise<Users> {
+  async signupLocal(dto: AuthDto, req: Request): Promise<Users> {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
@@ -22,7 +26,7 @@ export class AuthService {
     const hash = await argon.hash(dto.password)
     dto.password = undefined
 
-    request.user = { ...User }
+    await this.saveSession(req, User)
 
     return this.prisma.users.create({
       data: {
@@ -45,42 +49,66 @@ export class AuthService {
     return User
   }
 
-  async signinLocal(dto: AuthDto): Promise<Users> {
-    const User = await this.prisma.users.findUnique({
-      where: { username: dto.username },
-    })
+  async signinLocal(dto: AuthDto, req: Request): Promise<Users> {
+    const User = await this.ValidateUser(dto)
 
-    if (!User) throw new ForbiddenException('Access Denied')
-
-    const passwordMatches = await argon.verify(User.hash, dto.password)
-    if (!passwordMatches) throw new ForbiddenException('Access Denied')
-
-    request.user = { ...User }
+    await this.saveSession(req, User)
 
     return User
   }
 
   async logout(req: Request): Promise<boolean> {
-    req.user = undefined
+    await this.destroySession(req)
     return true
   }
 
-  async ValidateOAuthUser(dto: AuthDto): Promise<any> {
+  async ValidateOAuthUser(dto: AuthDto, req: Request): Promise<any> {
     const User = await this.prisma.users.findUnique({
       where: {
         username: dto.username,
+        email: dto.email,
       },
     })
 
-    if (User) return User
+    if (User) {
+      await this.saveSession(req, User)
+      return User
+    }
 
     const hash = await argon.hash(dto.password)
     dto.password = undefined
-    return this.prisma.users.create({
+
+    const user = await this.prisma.users.create({
       data: {
         ...dto,
         hash: hash,
       },
+    })
+
+    if (user) {
+      await this.saveSession(req, User)
+      return user
+    }
+    return new BadRequestException()
+  }
+
+  private saveSession(req: Request, user: Users): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      req.session.user = { ...user }
+
+      req.session.save((err) => {
+        if (err) reject(err)
+        else resolve(true)
+      })
+    })
+  }
+
+  private destroySession(req: Request): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      req.session.destroy((err) => {
+        if (err) reject(err)
+        else resolve(true)
+      })
     })
   }
 }

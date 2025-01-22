@@ -5,6 +5,8 @@ import * as session from 'express-session'
 import * as passport from 'passport'
 import * as cookieParser from 'cookie-parser'
 import * as cliColor from 'cli-color'
+import IORedis from 'ioredis'
+import { RedisStore } from 'connect-redis'
 
 async function bootstrap() {
   console.log(cliColor.green('✅ NestJS application is starting...'))
@@ -38,19 +40,26 @@ async function bootstrap() {
 
   app.use(cookieParser())
 
+  const redis = new IORedis(process.env.REDIS_URI || 'redis://localhost:6379')
+
   app.use(
     session({
-      secret: 'asiodasjoddjdoasddasoidjasiodasdjaiodd',
+      secret: process.env.EXPRESS_TOKEN,
       saveUninitialized: false,
       resave: false,
+      name: 'user-session',
       cookie: {
         sameSite: 'lax',
         httpOnly: true,
         secure: false,
-        maxAge: 60 * 60 * 24 * 7,
       },
+      store: new RedisStore({
+        client: redis,
+        prefix: process.env.SESSION_FOLDER,
+      }),
     }),
   )
+
   app.use(passport.initialize())
   app.use(passport.session())
 
