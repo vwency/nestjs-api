@@ -97,8 +97,8 @@ jobs:
 
       - name: Build and push pg
         run: |
-          /kaniko/executor --dockerfile="database/Dockerfile" \
-            --context="${{ github.repositoryUrl }}#${{ github.ref_name }}#${{ github.sha }}"  \
+          /kaniko/executor --dockerfile="./Dockerfile" \
+            --context="${{ github.repositoryUrl }}#${{ github.ref_name }}#${{ github.sha }}:database/postgres"  \
             --destination="$GH_REGISTRY/$IMAGE_NAME:$(echo ${GITHUB_SHA} | head -c 7)" \
 
         env:
@@ -106,8 +106,51 @@ jobs:
           IMAGE_NAME: "${{ github.repository }}/pg"
 
 
+  ghcr-build-redis:
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/kaniko-project/executor:v1.23.0-debug  
+      options: --entrypoint /bin/sh
+    permissions: 
+      packages: write 
+
+    environment: deploy
+    
+    steps:
+
+
+      - name: Set branch name as environment variable
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Set up Docker config for Kaniko
+        run: |
+          cat <<EOF > /kaniko/.docker/config.json
+          {
+            "auths": {
+              "ghcr.io": {
+                "auth": "$(echo -n "$GIT_USERNAME:$GIT_PASSWORD" | base64 -w0)"
+              }
+            }
+          }
+          EOF
+        env:
+          GIT_USERNAME: ${{ github.actor }} 
+          GIT_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    
+
+      - name: Build and push pg
+        run: |
+          /kaniko/executor --dockerfile="./Dockerfile" \
+            --context="${{ github.repositoryUrl }}#${{ github.ref_name }}#${{ github.sha }}:database/redis"  \
+            --destination="$GH_REGISTRY/$IMAGE_NAME:$(echo ${GITHUB_SHA} | head -c 7)" \
+
+        env:
+          GH_REGISTRY: "ghcr.io"
+          IMAGE_NAME: "${{ github.repository }}/redis"
+
+
   deploy:
-    needs: [ghcr-build-nest-api, ghcr-build-pg, delete-old-images]
+    needs: [delete-old-images, ghcr-build-nest-api, ghcr-build-pg, ghcr-build-redis]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to environment

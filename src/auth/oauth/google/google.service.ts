@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { OAuthService } from '../oauth.service'
 import { AuthService } from 'src/auth/auth/auth.service'
 import { Request } from 'express'
+import { AuthDto } from 'src/auth/auth/dto'
 
 @Injectable()
 export class GoogleOAuthService {
@@ -30,15 +31,20 @@ export class GoogleOAuthService {
       accessToken,
     )
 
+    const user = await this.ExtractData(profile)
+
+    console.log('USER', user)
+
+    return this.authService.ValidateOAuthUser(user, req)
+  }
+
+  private async ExtractData(profile: any): Promise<AuthDto> {
     const user = {
       username:
         `${profile.given_name || ''} ${profile.family_name || ''}`.trim(),
       email: profile.email,
       password: '',
     }
-
-    console.log('USER', user)
-
-    return this.authService.ValidateOAuthUser(user, req)
+    return user
   }
 }

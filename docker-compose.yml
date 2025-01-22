@@ -1,8 +1,28 @@
 services:
+
+  redis:
+    build:
+      context: database/redis
+      dockerfile: ./Dockerfile
+    image: "${REDIS-IMAGE}:${IMAGE-TAG}"
+    environment:
+      TZ: "Europe/Omsk"
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    networks:
+      - app
+    logging:
+      driver: "json-file" 
+      options:
+        max-size: "1m"  
+        max-file: "3" 
+    mem_limit: 2G
+    cpus: 4.0
+
   postgres:
     build:
-      context: .
-      dockerfile: database/Dockerfile
+      context: database/postgres
+      dockerfile: ./Dockerfile
     image: ${PG-IMAGE}:${IMAGE-TAG}
     restart: always
     shm_size: 128mb
@@ -13,7 +33,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       PGDATA: ${PGDATA}
       PGPORT: ${DATABASE_PORT}
-      TZ: "Europe/Moscow"
+      TZ: "Europe/Omsk"
       
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
@@ -21,7 +41,7 @@ services:
     volumes:
       - pg_data:${PGDATA}
     networks:
-      - backend
+      - app
       
     logging:
       driver: "json-file" 
@@ -48,7 +68,7 @@ services:
     env_file:
       - prod.env
     environment:
-      TZ: "Europe/Moscow"
+      TZ: "Europe/Omsk"
     
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"  
@@ -56,7 +76,7 @@ services:
       - postgres 
     container_name: "nestjs-app"
     networks:
-      - backend
+      - app
       
     restart: always
     
@@ -78,7 +98,7 @@ volumes:
   pg_data:
 
 networks:
-  backend:
+  app:
     driver: bridge
     ipam:
       driver: default

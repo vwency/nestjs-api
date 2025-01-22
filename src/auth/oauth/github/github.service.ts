@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { OAuthService } from '../oauth.service'
 import { AuthService } from 'src/auth/auth/auth.service'
 import { Request } from 'express'
+import { AuthDto } from 'src/auth/auth/dto'
 
 @Injectable()
 export class GithubOAuthService {
@@ -41,7 +42,7 @@ export class GithubOAuthService {
     }
   }
 
-  private async getUserData(accessToken: string): Promise<any> {
+  private async getUserData(accessToken: string): Promise<AuthDto> {
     const userResponse = await this.oauthService.getProfile(
       this.GITHUB_USER_URL,
       accessToken,
@@ -60,10 +61,12 @@ export class GithubOAuthService {
       email = primaryEmail?.email || null
     }
 
-    return {
+    const user = {
       username: userResponse.login,
       email,
       password: ' ',
     }
+
+    return user
   }
 }
