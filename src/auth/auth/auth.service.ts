@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   async logout(req: Request): Promise<boolean> {
-    req.session.user = null
+    await this.destroySession(req)
     return true
   }
 
@@ -97,6 +97,15 @@ export class AuthService {
       req.session.user = { ...user }
 
       req.session.save((err) => {
+        if (err) reject(err)
+        else resolve(true)
+      })
+    })
+  }
+
+  private destroySession(req: Request): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      req.session.destroy((err) => {
         if (err) reject(err)
         else resolve(true)
       })
