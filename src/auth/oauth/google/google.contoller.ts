@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { GoogleOAuthService } from './google.service'
 
 @ApiTags('OAuth2-google')
@@ -16,6 +16,8 @@ import { GoogleOAuthService } from './google.service'
 export class OAuthController {
   constructor(private readonly googleService: GoogleOAuthService) {}
 
+  @ApiTags('OAuth2-google')
+  @ApiOperation({ summary: 'Google login' })
   @Get('google/login')
   async handleLogin(@Res() res: Response) {
     const baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -30,6 +32,8 @@ export class OAuthController {
     return res.redirect(googleLoginUrl)
   }
 
+  @ApiTags('OAuth2-google')
+  @ApiOperation({ summary: 'Google redirect url' })
   @Get('google/redirect')
   async handleRedirect(
     @Query('code') code: string,

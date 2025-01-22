@@ -12,7 +12,7 @@ import {
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
 import { AtGuard } from './guards'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
 
 @Controller('auth')
@@ -20,6 +20,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiTags('Auth')
+  @ApiOperation({ summary: 'Register new account' })
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async signupLocal(@Body() dto: AuthDto, @Req() req: Request): Promise<any> {
@@ -27,6 +28,7 @@ export class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiOperation({ summary: 'Sign in' })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async signinLocal(@Body() dto: AuthDto, @Req() req: Request): Promise<any> {
@@ -34,6 +36,7 @@ export class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiOperation({ summary: 'Get session status' })
   @ApiBearerAuth()
   @Get('status')
   @UseGuards(AtGuard)
@@ -42,6 +45,7 @@ export class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiOperation({ summary: 'Destroy session' })
   @ApiBearerAuth()
   @Get('logout')
   @UseGuards(AtGuard)
