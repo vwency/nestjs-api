@@ -30,6 +30,7 @@ services:
     environment:
       POSTGRES_USERNAME: ${DATABASE_USERNAME}
       DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_NAME: ${DATABASE_NAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       PGDATA: ${PGDATA}
       PGPORT: ${DATABASE_PORT}
@@ -64,6 +65,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${NESTAPI-IMAGE}:${IMAGE-TAG}
     image: ${NESTAPI-IMAGE}:${IMAGE-TAG}
     env_file:
       - prod.env

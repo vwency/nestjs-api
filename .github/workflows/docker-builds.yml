@@ -19,8 +19,7 @@ jobs:
               https://api.github.com/repos/${{ github.repository }}/actions/workflows/delete-old-image.yml/dispatches \
               -d '{"ref": "main"}'
 
-
-
+              
   ghcr-build-nest-api:
     runs-on: ubuntu-latest
     container:
@@ -72,6 +71,7 @@ jobs:
       packages: write 
 
     environment: deploy
+    
     
     steps:
 
