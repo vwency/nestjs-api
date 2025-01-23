@@ -9,7 +9,7 @@ jobs:
 
 
   trigger-build:
-    uses: multi-repo/workflows/.github/workflows/kaniko-build.yml@main
+    uses: multi-repo/workflows/.github/workflows/kaniko-build.yaml@main
     with:
       image-name: ${{ github.repository }}/nest-api
     secrets:
@@ -18,13 +18,13 @@ jobs:
 
           
   trigger-cleanup:
-      uses: multi-repo/workflows/.github/workflows/clean-registry.yml@main
+      uses: multi-repo/workflows/.github/workflows/clean-registry.yaml@main
       with:
         owner: vwency
         repository: nestjs-api
         package: nestjs-api/nest-api
         keep_n_tagged: 2
-        dry_run: true  
+        dry_run: true
       secrets:
         personal_access_token: ${{ secrets.GITHUB_TOKEN }}
 
