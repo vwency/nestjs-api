@@ -21,10 +21,10 @@ async function bootstrap() {
       Nest-js boilerplate
       PrismaORM 
       Postgres 
-      Express-session
+      Express-session & Redis
       `,
     )
-    .setVersion('0.1.2')
+    .setVersion('1.0.0')
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
