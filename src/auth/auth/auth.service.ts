@@ -52,7 +52,7 @@ export class AuthService {
   async signinLocal(dto: AuthDto, req: Request): Promise<Users> {
     const User = await this.ValidateUser(dto)
 
-    await this.saveSession(req, User)
+    await this.saveSession(req, User, dto.remember)
 
     return User
   }
@@ -71,7 +71,7 @@ export class AuthService {
     })
 
     if (User) {
-      await this.saveSession(req, User)
+      await this.saveSession(req, User, true)
       return User
     }
 
@@ -86,14 +86,19 @@ export class AuthService {
     })
 
     if (user) {
-      await this.saveSession(req, User)
+      await this.saveSession(req, User, true)
       return user
     }
     return new BadRequestException()
   }
 
-  private async saveSession(req: Request, user: Users): Promise<boolean> {
+  private async saveSession(
+    req: Request,
+    user: Users,
+    remember?: boolean,
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      if (!remember) req.session.cookie.maxAge = 1000
       req.session.user = { ...user }
       req.session.save((err) => {
         if (err) reject(err)
