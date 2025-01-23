@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as session from 'express-session'
-import * as passport from 'passport'
 import * as cookieParser from 'cookie-parser'
 import * as cliColor from 'cli-color'
 import IORedis from 'ioredis'
@@ -61,9 +60,6 @@ async function bootstrap() {
       }),
     }),
   )
-
-  app.use(passport.initialize())
-  app.use(passport.session())
 
   await app.listen(3000)
 }
