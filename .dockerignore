@@ -8,3 +8,5 @@ docker-compose.yml
 README.md
 prod.env
 yarn.lock
+.github
+.husky

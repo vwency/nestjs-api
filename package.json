@@ -1,7 +1,7 @@
 {
-  "name": "aunth_ex",
-  "version": "0.0.1",
-  "description": "",
+  "name": "nest-api",
+  "version": "1.0.0",
+  "description": "simple api",
   "author": "",
   "private": true,
   "license": "UNLICENSED",

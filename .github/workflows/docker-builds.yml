@@ -38,7 +38,7 @@ jobs:
         run: |
           /kaniko/executor --dockerfile="./Dockerfile" \
             --context="${{ github.repositoryUrl }}#${{ github.ref_name }}#${{ github.sha }}"  \
-            --destination="$GH_REGISTRY/$IMAGE_NAME:$(echo ${GITHUB_SHA} | head -c 7)" \
+            --destination="$GH_REGISTRY/$IMAGE_NAME:$GITHUB_REF_NAME" \
         env:
           GH_REGISTRY: "ghcr.io"
           IMAGE_NAME: "${{ github.repository }}/nest-api"
@@ -55,8 +55,10 @@ jobs:
             curl -X POST \
               -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/workflows/delete-old-image.yml/dispatches \
+              "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ env.ACTION_NAME }}/dispatches" \
               -d '{"ref": "main"}'
+        env:
+          ACTION_NAME: delete-old-image.yml
 
 
   deploy:
