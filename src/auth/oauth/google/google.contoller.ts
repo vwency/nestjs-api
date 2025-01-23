@@ -41,8 +41,8 @@ export class OAuthController {
     @Req() req: Request,
   ) {
     try {
-      const user = await this.googleService.authenticate(code, req)
-      return res.status(200).json(user)
+      await this.googleService.authenticate(code, req)
+      return res.redirect('/auth/status')
     } catch (error) {
       throw new HttpException(
         error.response?.data?.message || error.message,
