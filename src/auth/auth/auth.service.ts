@@ -92,10 +92,9 @@ export class AuthService {
     return new BadRequestException()
   }
 
-  private saveSession(req: Request, user: Users): Promise<boolean> {
+  private async saveSession(req: Request, user: Users): Promise<boolean> {
     return new Promise((resolve, reject) => {
       req.session.user = { ...user }
-
       req.session.save((err) => {
         if (err) reject(err)
         else resolve(true)
@@ -103,7 +102,7 @@ export class AuthService {
     })
   }
 
-  private destroySession(req: Request): Promise<boolean> {
+  private async destroySession(req: Request): Promise<boolean> {
     return new Promise((resolve, reject) => {
       req.session.destroy((err) => {
         if (err) reject(err)

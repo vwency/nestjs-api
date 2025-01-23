@@ -1,7 +1,7 @@
 services:
 
   redis:
-    image: "${REDIS-IMAGE}:${IMAGE-TAG}"
+    image: "${REDIS_IMAGE}:${IMAGE_TAG}"
     environment:
       TZ: "Europe/Omsk"
     ports:
@@ -17,7 +17,7 @@ services:
     cpus: 4.0
 
   postgres:
-    image: ${PG-IMAGE}:${IMAGE-TAG}
+    image: "${PG_IMAGE}:${IMAGE_TAG}"
     restart: always
     shm_size: 128mb
     
@@ -58,7 +58,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ${NESTAPI-IMAGE}:${IMAGE-TAG}
+    image: "${NESTAPI_IMAGE}:${IMAGE_TAG}"
     env_file:
       - prod.env
     environment:

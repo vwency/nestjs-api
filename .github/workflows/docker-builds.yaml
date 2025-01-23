@@ -20,7 +20,7 @@ jobs:
   trigger-cleanup:
       uses: multi-repo/workflows/.github/workflows/clean-registry.yaml@main
       with:
-        owner: vwency
+        owner: ${{ github.repository_owner }}
         repository: nestjs-api
         package: nestjs-api/nest-api
         keep_n_tagged: 2
