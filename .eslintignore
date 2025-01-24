@@ -1,0 +1,9 @@
+node_modules
+.husky
+dist
+.idea
+.vscode
+prisma
+.dockerignore
+README.md 
+.github
