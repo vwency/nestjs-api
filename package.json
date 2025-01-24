@@ -2,9 +2,9 @@
   "name": "nest-api",
   "version": "1.0.0",
   "description": "simple api",
-  "author": "",
+  "author": "vwency",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "GNU",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
