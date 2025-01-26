@@ -14,7 +14,7 @@ export class AtGuard {
       context.getHandler(),
       context.getClass(),
     ])
-
+    console.log('auth seccues')
     if (isPublic) return true
 
     const request = context.switchToHttp().getRequest()

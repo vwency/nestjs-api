@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common'
 
@@ -13,7 +14,7 @@ import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
 import { AtGuard } from './guards'
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { Request } from 'express'
+import { Request, Response } from 'express'
 
 @Controller('auth')
 export class AuthController {
@@ -30,9 +31,16 @@ export class AuthController {
   @ApiTags('Auth')
   @ApiOperation({ summary: 'Sign in' })
   @Post('login')
+  @HttpCode(200)
   @HttpCode(HttpStatus.OK)
-  async signinLocal(@Body() dto: AuthDto, @Req() req: Request): Promise<any> {
-    return await this.authService.signinLocal(dto, req)
+  async signinLocal(
+    @Body() dto: AuthDto,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
+    console.log('attempt auth')
+    await this.authService.signinLocal(dto, req)
+    return res.redirect('/auth/status')
   }
 
   @ApiTags('Auth')
@@ -40,6 +48,7 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('status')
   @UseGuards(AtGuard)
+  @HttpCode(200)
   async status(@Req() req: Request) {
     return req.session.user
   }
