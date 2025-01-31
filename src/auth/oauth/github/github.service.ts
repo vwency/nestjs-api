@@ -31,8 +31,6 @@ export class GithubOAuthService {
 
       const user = await this.getUserData(accessToken)
 
-      console.log('USER', user)
-
       return this.authservice.ValidateOAuthUser(user, req)
     } catch (error) {
       throw new HttpException(

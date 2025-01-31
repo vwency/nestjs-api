@@ -38,7 +38,6 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<any> {
-    console.log('attempt auth')
     await this.authService.signinLocal(dto, req)
     return res.redirect('/auth/status')
   }

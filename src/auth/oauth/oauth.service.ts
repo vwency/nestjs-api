@@ -35,7 +35,6 @@ export class OAuthService {
       const response = await axios.get(profileUrl, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
-      console.log('Profile Response:', response.data)
       return response.data
     } catch (error) {
       console.error('Profile Error:', error.response?.data || error.message)

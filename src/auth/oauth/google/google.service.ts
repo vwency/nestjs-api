@@ -33,8 +33,6 @@ export class GoogleOAuthService {
 
     const user = await this.ExtractData(profile)
 
-    console.log('USER', user)
-
     return this.authService.ValidateOAuthUser(user, req)
   }
 

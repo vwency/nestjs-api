@@ -10,7 +10,7 @@ export class GithubController {
   @ApiTags('OAuth2-github')
   @ApiOperation({ summary: 'login with github account' })
   @Get('login')
-  githubLogin(@Res() res: Response) {
+  async githubLogin(@Res() res: Response) {
     const url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_CALLBACK_URL}&scope=user:email`
     return res.redirect(url)
   }
